@@ -145,14 +145,14 @@ export default function LoginClient() {
                 <input
                   value={adminUsername}
                   onChange={(e) => setAdminUsername(e.target.value)}
-                  placeholder="Usuário ADM (padrão: ADM)"
+                  placeholder="Usuário ADM"
                   autoComplete="username"
                   className="w-full px-4 py-3.5 rounded-2xl border-2 border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800/50 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-blue/45 focus:border-primary-blue transition-all shadow-sm"
                 />
                 <input
                   value={adminPassword}
                   onChange={(e) => setAdminPassword(e.target.value)}
-                  placeholder="Senha ADM (padrão: 123)"
+                  placeholder="Senha ADM"
                   type="password"
                   autoComplete="current-password"
                   className="w-full px-4 py-3.5 rounded-2xl border-2 border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800/50 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-red-500/35 focus:border-red-500/60 transition-all shadow-sm"

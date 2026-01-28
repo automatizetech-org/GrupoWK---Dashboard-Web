@@ -1171,11 +1171,8 @@ export default function AccountsPayableDashboard({ automation, department, onBac
           {/* Período: filtro por data de vencimento dos lançamentos */}
           <div className="relative z-10">
             <label className="block text-sm font-medium text-neutral-text-primary dark:text-slate-200 mb-2 transition-colors duration-500">
-              Período (por vencimento)
+              Período
             </label>
-            <p className="block text-xs text-neutral-text-secondary dark:text-slate-400 mb-3 transition-colors duration-500">
-              Exibe lançamentos cuja data de vencimento estiver entre as datas escolhidas. Ex.: filtrar dia 25 mostra todos com vencimento no dia 25.
-            </p>
 
             <div className="mb-4 relative z-10">
               <label className="block text-xs text-neutral-text-secondary dark:text-slate-400 mb-2 transition-colors duration-500">
