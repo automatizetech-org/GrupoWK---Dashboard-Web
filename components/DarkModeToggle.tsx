@@ -36,7 +36,7 @@ export default function DarkModeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="relative w-16 h-8 rounded-full overflow-hidden shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 dark:focus:ring-amber-400 group transition-all duration-300"
+      className="relative w-14 h-7 md:w-16 md:h-8 rounded-full overflow-hidden shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 dark:focus:ring-amber-400 group transition-all duration-300 touch-manipulation active:scale-95"
       aria-label={isDark ? 'Ativar modo claro' : 'Ativar modo escuro'}
     >
       {/* Background com gradiente suave - transição entre modos */}
@@ -54,28 +54,28 @@ export default function DarkModeToggle() {
       </div>
       
       {/* Ícone do sol (light mode) - aparece à esquerda */}
-      <div className={`absolute left-1.5 top-1/2 -translate-y-1/2 transition-all duration-500 ease-in-out z-10 ${
+      <div className={`absolute left-1 md:left-1.5 top-1/2 -translate-y-1/2 transition-all duration-500 ease-in-out z-10 ${
         isDark 
           ? 'opacity-0 scale-0 rotate-90 translate-x-0' 
           : 'opacity-100 scale-100 rotate-0 translate-x-0'
       }`}>
         <Sun 
-          size={18} 
-          className="text-amber-700 drop-shadow-lg" 
+          size={16} 
+          className="md:w-[18px] md:h-[18px] text-amber-700 drop-shadow-lg" 
           fill="currentColor"
           strokeWidth={2}
         />
       </div>
       
       {/* Ícone da lua (dark mode) - aparece à direita */}
-      <div className={`absolute right-1.5 top-1/2 -translate-y-1/2 transition-all duration-500 ease-in-out z-10 ${
+      <div className={`absolute right-1 md:right-1.5 top-1/2 -translate-y-1/2 transition-all duration-500 ease-in-out z-10 ${
         isDark 
           ? 'opacity-100 scale-100 rotate-0 translate-x-0' 
           : 'opacity-0 scale-0 -rotate-90 translate-x-0'
       }`}>
         <Moon 
-          size={18} 
-          className="text-slate-400 drop-shadow-lg" 
+          size={16} 
+          className="md:w-[18px] md:h-[18px] text-slate-400 drop-shadow-lg" 
           fill="currentColor"
           strokeWidth={2}
         />
@@ -83,8 +83,8 @@ export default function DarkModeToggle() {
       
       {/* Círculo deslizante - rola suavemente */}
       <div 
-        className={`absolute top-0.5 w-7 h-7 bg-white rounded-full shadow-xl transition-all duration-500 ease-in-out ${
-          isDark ? 'left-[calc(100%-1.75rem-0.125rem)]' : 'left-0.5'
+        className={`absolute top-0.5 md:top-0.5 w-6 h-6 md:w-7 md:h-7 bg-white rounded-full shadow-xl transition-all duration-500 ease-in-out ${
+          isDark ? 'left-[calc(100%-1.5rem-0.125rem)] md:left-[calc(100%-1.75rem-0.125rem)]' : 'left-0.5'
         }`}
         style={{
           boxShadow: isDark 

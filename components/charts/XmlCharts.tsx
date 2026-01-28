@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { type TaxData } from '@/lib/data'
 import {
   PieChart,
@@ -29,6 +29,14 @@ interface XmlChartsProps {
 
 export default function XmlCharts({ data, dateRange }: XmlChartsProps) {
   const [activePieIndex, setActivePieIndex] = useState<number | null>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
   
   // Valida dateRange antes de usar - DEVE estar antes de qualquer early return
   const safeDateRange = useMemo(() => {
@@ -489,15 +497,15 @@ export default function XmlCharts({ data, dateRange }: XmlChartsProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
       {/* Enhanced Pie Chart - Document Types */}
-      <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-2xl p-8 shadow-3d relative overflow-hidden">
+      <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-xl md:rounded-2xl p-4 md:p-6 lg:p-8 shadow-3d relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5"></div>
-        <h3 className="text-xl font-bold text-neutral-text-primary mb-6 flex items-center gap-2 relative z-10">
-          <div className="w-1 h-6 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full shadow-lg"></div>
-          Distribuição por Tipo de Documento
+        <h3 className="text-base md:text-lg lg:text-xl font-bold text-neutral-text-primary mb-4 md:mb-6 flex items-center gap-2 relative z-10">
+          <div className="w-1 h-5 md:h-6 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full shadow-lg flex-shrink-0"></div>
+          <span className="break-words">Distribuição por Tipo de Documento</span>
         </h3>
-        <ResponsiveContainer width="100%" height={350} className="chart-3d-container">
+        <ResponsiveContainer width="100%" height={280} className="md:h-[350px] chart-3d-container">
           <PieChart>
             <defs>
               {documentTypeData.map((entry, index) => (
@@ -515,8 +523,8 @@ export default function XmlCharts({ data, dateRange }: XmlChartsProps) {
               label={({ name, percent, value }) => 
                 `${name}\n${(percent * 100).toFixed(1)}%\n(${value.toLocaleString()})`
               }
-              outerRadius={120}
-              innerRadius={40}
+              outerRadius={isMobile ? 80 : 120}
+              innerRadius={isMobile ? 30 : 40}
               fill="#8884d8"
               dataKey="value"
               paddingAngle={2}
@@ -664,34 +672,37 @@ export default function XmlCharts({ data, dateRange }: XmlChartsProps) {
       </div>
 
       {/* Bar Chart - Companies */}
-      <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-2xl p-8 shadow-3d relative overflow-hidden rotate-3d">
+      <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-xl md:rounded-2xl p-4 md:p-6 lg:p-8 shadow-3d relative overflow-hidden rotate-3d">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5"></div>
-        <h3 className="text-xl font-bold text-neutral-text-primary mb-6 flex items-center gap-2 relative z-10">
-          <div className="w-1 h-6 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full"></div>
-          Documentos por Empresa
+        <h3 className="text-base md:text-lg lg:text-xl font-bold text-neutral-text-primary mb-4 md:mb-6 flex items-center gap-2 relative z-10">
+          <div className="w-1 h-5 md:h-6 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full flex-shrink-0"></div>
+          <span className="break-words">Documentos por Empresa</span>
         </h3>
         {companyData.length === 0 ? (
-          <div className="h-[350px] flex items-center justify-center">
-            <p className="text-neutral-text-secondary">Nenhum dado disponível para exibir</p>
+          <div className="h-[280px] md:h-[350px] flex items-center justify-center">
+            <p className="text-xs md:text-sm text-neutral-text-secondary text-center px-4">Nenhum dado disponível para exibir</p>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height={350} className="chart-3d-container">
-            <BarChart data={companyData} margin={{ top: 20, right: 30, left: 0, bottom: 60 }}>
+          <ResponsiveContainer width="100%" height={280} className="md:h-[350px] chart-3d-container">
+            <BarChart data={companyData} margin={{ top: 10, right: 10, left: 0, bottom: isMobile ? 40 : 60 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" opacity={0.5} />
               <XAxis 
                 dataKey="name" 
                 stroke="#6B7280" 
-                fontSize={11}
+                fontSize={isMobile ? 9 : 11}
                 tickLine={false}
                 axisLine={false}
                 tick={false}
+                angle={isMobile ? -45 : 0}
+                textAnchor={isMobile ? 'end' : 'middle'}
               />
             <YAxis 
               stroke="#6B7280" 
-              fontSize={12}
+              fontSize={isMobile ? 10 : 12}
               tickLine={false}
               axisLine={false}
               domain={[0, 'auto']}
+              width={isMobile ? 40 : 60}
               tickFormatter={(value) => {
                 if (value >= 1000) {
                   return `${(value / 1000).toFixed(0)}k`
@@ -701,7 +712,7 @@ export default function XmlCharts({ data, dateRange }: XmlChartsProps) {
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend 
-              wrapperStyle={{ paddingTop: '20px' }}
+              wrapperStyle={{ paddingTop: '10px', fontSize: isMobile ? '11px' : '14px' }}
               iconType="circle"
             />
             <Bar 
@@ -734,18 +745,18 @@ export default function XmlCharts({ data, dateRange }: XmlChartsProps) {
       </div>
 
       {/* Evolution Chart - Compact and Efficient */}
-      <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-2xl p-6 shadow-3d relative overflow-hidden lg:col-span-2">
+      <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-xl md:rounded-2xl p-4 md:p-6 shadow-3d relative overflow-hidden lg:col-span-2">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5"></div>
-        <div className="flex items-center justify-between mb-4 relative z-10">
-          <h3 className="text-lg font-bold text-neutral-text-primary flex items-center gap-2">
-            <div className="w-1 h-5 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full"></div>
-            Evolução por Período
+        <div className="flex items-center justify-between mb-3 md:mb-4 relative z-10">
+          <h3 className="text-base md:text-lg font-bold text-neutral-text-primary flex items-center gap-2">
+            <div className="w-1 h-4 md:h-5 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full flex-shrink-0"></div>
+            <span className="break-words">Evolução por Período</span>
           </h3>
         </div>
-        <ResponsiveContainer width="100%" height={500} className="chart-3d-container">
+        <ResponsiveContainer width="100%" height={350} className="md:h-[450px] lg:h-[500px] chart-3d-container">
           <AreaChart 
             data={evolutionDataProcessed}
-            margin={{ top: 20, right: 30, left: 60, bottom: 60 }}
+            margin={{ top: 10, right: 10, left: isMobile ? 40 : 60, bottom: isMobile ? 40 : 60 }}
             syncId="evolution-chart"
           >
             <defs>
