@@ -1,33 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { supabaseAdmin } from '@/lib/supabase'
+import { getSessionCookieName, signSession, verifyPassword } from '@/lib/auth'
 
-const COOKIE_NAME = 'dashboard_access'
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7 // 7 dias
-
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(password)
-  const hash = await crypto.subtle.digest('SHA-256', data)
-  return btoa(String.fromCharCode(...new Uint8Array(hash)))
-}
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { password } = body
+    const { username, password } = body ?? {}
 
-    const secret = process.env.DASHBOARD_ACCESS_PASSWORD
-    if (!secret) {
-      // Se não configurou senha, aceita qualquer acesso (dev) ou bloqueia
-      if (process.env.NODE_ENV === 'production') {
-        return NextResponse.json(
-          { success: false, error: 'Acesso não configurado. Defina DASHBOARD_ACCESS_PASSWORD.' },
-          { status: 500 }
-        )
-      }
-      // Em desenvolvimento sem senha: permite acesso com qualquer senha ou "dev"
-      const token = password ? await hashPassword(password) : await hashPassword('dev')
-      const res = NextResponse.json({ success: true })
-      res.cookies.set(COOKIE_NAME, token, {
+    if (!username || typeof username !== 'string' || !password || typeof password !== 'string') {
+      return NextResponse.json({ success: false, error: 'Usuário e senha são obrigatórios' }, { status: 400 })
+    }
+
+    if (!supabaseAdmin) {
+      return NextResponse.json(
+        { success: false, error: 'Supabase não configurado (SUPABASE_SERVICE_ROLE_KEY)' },
+        { status: 500 }
+      )
+    }
+
+    const user = username.trim().toLowerCase()
+    const pass = password
+
+    // 1) tenta admin
+    const { data: adminRow, error: adminErr } = await supabaseAdmin
+      .from('admins')
+      .select('username, password_hash')
+      .eq('username', user)
+      .maybeSingle()
+
+    if (adminErr) {
+      return NextResponse.json({ success: false, error: adminErr.message }, { status: 500 })
+    }
+
+    if (adminRow?.password_hash) {
+      const ok = await verifyPassword(pass, adminRow.password_hash)
+      if (!ok) return NextResponse.json({ success: false, error: 'Usuário ou senha incorretos' }, { status: 401 })
+
+      const token = await signSession({ sub: user, role: 'admin' }, COOKIE_MAX_AGE)
+      const res = NextResponse.json({ success: true, role: 'admin' })
+      res.cookies.set(getSessionCookieName(), token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
@@ -37,25 +50,27 @@ export async function POST(request: NextRequest) {
       return res
     }
 
-    if (!password || typeof password !== 'string') {
-      return NextResponse.json(
-        { success: false, error: 'Senha obrigatória' },
-        { status: 400 }
-      )
+    // 2) tenta usuário comum
+    const { data: userRow, error: userErr } = await supabaseAdmin
+      .from('users')
+      .select('username, password_hash')
+      .eq('username', user)
+      .maybeSingle()
+
+    if (userErr) {
+      return NextResponse.json({ success: false, error: userErr.message }, { status: 500 })
     }
 
-    const expectedHash = await hashPassword(secret)
-    const receivedHash = await hashPassword(password.trim())
-
-    if (receivedHash !== expectedHash) {
-      return NextResponse.json(
-        { success: false, error: 'Senha incorreta' },
-        { status: 401 }
-      )
+    if (!userRow?.password_hash) {
+      return NextResponse.json({ success: false, error: 'Usuário ou senha incorretos' }, { status: 401 })
     }
 
-    const response = NextResponse.json({ success: true })
-    response.cookies.set(COOKIE_NAME, expectedHash, {
+    const ok = await verifyPassword(pass, userRow.password_hash)
+    if (!ok) return NextResponse.json({ success: false, error: 'Usuário ou senha incorretos' }, { status: 401 })
+
+    const token = await signSession({ sub: user, role: 'user' }, COOKIE_MAX_AGE)
+    const response = NextResponse.json({ success: true, role: 'user' })
+    response.cookies.set(getSessionCookieName(), token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',

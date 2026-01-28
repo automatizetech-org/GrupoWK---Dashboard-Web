@@ -623,9 +623,9 @@ function parseClientData(text: string): ClientDelinquency[] {
           currentClient.titles.push(title)
           
           // Accumulate totals
-          currentClient.amount += totalValue
-          currentClient.paidAmount += paidValue
-          currentClient.pendingAmount += pendingValue
+          currentClient.amount = (currentClient.amount || 0) + totalValue
+          currentClient.paidAmount = (currentClient.paidAmount || 0) + paidValue
+          currentClient.pendingAmount = (currentClient.pendingAmount || 0) + pendingValue
           
           console.log(`  → Title (same line): ${invoiceNumber} - Venc: ${dueDate} - Valor: ${totalValue}, Pago: ${paidValue}, Pendente: ${pendingValue}`)
         } catch (err) {
@@ -714,9 +714,9 @@ function parseClientData(text: string): ClientDelinquency[] {
             currentClient.titles.push(title)
             
             // Accumulate totals
-            currentClient.amount += totalValue
-            currentClient.paidAmount += paidValue
-            currentClient.pendingAmount += pendingValue
+            currentClient.amount = (currentClient.amount || 0) + totalValue
+            currentClient.paidAmount = (currentClient.paidAmount || 0) + paidValue
+            currentClient.pendingAmount = (currentClient.pendingAmount || 0) + pendingValue
             
             foundInLongLine = true
             console.log(`  → Title (long line): ${invoiceNumber} - Venc: ${dueDate} - Valor: ${totalValue}, Pago: ${paidValue}, Pendente: ${pendingValue}`)
@@ -770,9 +770,9 @@ function parseClientData(text: string): ClientDelinquency[] {
           currentClient.titles.push(title)
           
           // Accumulate totals
-          currentClient.amount += totalValue
-          currentClient.paidAmount += paidValue
-          currentClient.pendingAmount += pendingValue
+          currentClient.amount = (currentClient.amount || 0) + totalValue
+          currentClient.paidAmount = (currentClient.paidAmount || 0) + paidValue
+          currentClient.pendingAmount = (currentClient.pendingAmount || 0) + pendingValue
           
           console.log(`  → Title: ${invoiceNumber} - Venc: ${dueDate} - Valor: ${totalValue}, Pago: ${paidValue}, Pendente: ${pendingValue}`)
         } catch (err) {
@@ -916,9 +916,9 @@ function parseClientData(text: string): ClientDelinquency[] {
               currentClient.titles.push(title)
               
               // Accumulate totals
-              currentClient.amount += totalValue
-              currentClient.paidAmount += paidValue
-              currentClient.pendingAmount += pendingValue
+              currentClient.amount = (currentClient.amount || 0) + totalValue
+              currentClient.paidAmount = (currentClient.paidAmount || 0) + paidValue
+              currentClient.pendingAmount = (currentClient.pendingAmount || 0) + pendingValue
               
               console.log(`  → Title: ${invoiceNumber} - Venc: ${dueDate} - Valor: ${totalValue}, Pago: ${paidValue}, Pendente: ${pendingValue}`)
             } catch (err) {
@@ -1025,9 +1025,9 @@ function parseClientData(text: string): ClientDelinquency[] {
                 }
                 currentClient.titles.push(title)
                 
-                currentClient.amount += totalValue
-                currentClient.paidAmount += paidValue
-                currentClient.pendingAmount += pendingValue
+                currentClient.amount = (currentClient.amount || 0) + totalValue
+                currentClient.paidAmount = (currentClient.paidAmount || 0) + paidValue
+                currentClient.pendingAmount = (currentClient.pendingAmount || 0) + pendingValue
               } catch (err) {
                 console.warn(`Error parsing title line (fallback): ${nextLine}`, err)
               }
@@ -1047,12 +1047,15 @@ function parseClientData(text: string): ClientDelinquency[] {
   
   // Update status for each client
   clients.forEach(client => {
-    if (client.paidAmount && client.paidAmount > 0) {
-      client.status = client.pendingAmount > 0 ? 'paid' : 'paid'
-    } else if (client.pendingAmount && client.pendingAmount > 0) {
-      client.status = 'pending'
-    } else {
+    const paid = client.paidAmount || 0
+    const pending = client.pendingAmount || 0
+
+    if (pending > 0) {
       client.status = 'overdue'
+    } else if (paid > 0) {
+      client.status = 'paid'
+    } else {
+      client.status = 'pending'
     }
   })
   
