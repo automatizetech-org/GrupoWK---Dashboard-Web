@@ -1,0 +1,1016 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-blue: #2563EB;
+  --primary-blue-dark: #1E40AF;
+  --primary-blue-light: #3B82F6;
+  --secondary-purple: #7C3AED;
+  --secondary-purple-dark: #6D28D9;
+  --background: #F9FAFB;
+  --surface: #FFFFFF;
+  --border: #E5E7EB;
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --info: #3B82F6;
+
+  /* Accounts Payable (Recharts) */
+  --ap-chart-grid: rgba(17, 24, 39, 0.16);
+  --ap-chart-axis: rgba(17, 24, 39, 0.65);
+  --ap-tooltip-bg: rgba(255, 255, 255, 0.96);
+  --ap-tooltip-border: rgba(37, 99, 235, 0.22);
+  --ap-tooltip-text: #111827;
+}
+
+/* Dark mode variables */
+.dark {
+  --background: #0F172A;
+  --surface: #1E293B;
+  --border: #334155;
+  --text-primary: #F1F5F9;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
+
+  /* Accounts Payable (Recharts) */
+  --ap-chart-grid: rgba(226, 232, 240, 0.18);
+  --ap-chart-axis: rgba(226, 232, 240, 0.72);
+  --ap-tooltip-bg: rgba(15, 23, 42, 0.92);
+  --ap-tooltip-border: rgba(96, 165, 250, 0.35);
+  --ap-tooltip-text: #E2E8F0;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, var(--background) 0%, var(--border) 100%);
+  color: var(--text-primary);
+  perspective: 1000px;
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+.dark html,
+.dark body {
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 3D Effects */
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-3d:hover {
+  transform: translateY(-8px) rotateX(2deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* .card-3d-elevated moved below with dark mode support */
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.gradient-3d {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.gradient-3d::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Dark mode transitions */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Smooth gradient transitions for dark mode */
+.dark-mode-transition {
+  transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Radial gradient utility */
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+/* 3D Animations for Charts */
+@keyframes pulse-3d {
+  0%, 100% {
+    transform: translateZ(30px) scale(1.05);
+    filter: drop-shadow(0 12px 24px rgba(37, 99, 235, 0.6)) drop-shadow(0 6px 12px rgba(37, 99, 235, 0.4)) drop-shadow(0 0 30px rgba(37, 99, 235, 0.4));
+  }
+  50% {
+    transform: translateZ(40px) scale(1.08);
+    filter: drop-shadow(0 16px 32px rgba(37, 99, 235, 0.8)) drop-shadow(0 8px 16px rgba(37, 99, 235, 0.6)) drop-shadow(0 0 40px rgba(37, 99, 235, 0.6));
+  }
+}
+
+@keyframes slide-in-3d {
+  0% {
+    transform: translateZ(-60px) rotateX(-15deg) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: translateZ(10px) rotateX(2deg) scale(1.02);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateZ(0) rotateX(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+.chart-area-3d {
+  transform-style: preserve-3d;
+  animation: area-fill-3d 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.chart-area-3d:hover {
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15)) brightness(1.1);
+  transform: translateZ(5px);
+}
+
+.chart-line-3d {
+  transform-style: preserve-3d;
+  animation: slide-in-3d 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: filter 0.3s ease, stroke-width 0.3s ease;
+}
+
+.chart-line-3d:hover {
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.2)) brightness(1.15);
+  stroke-width: 5;
+}
+
+@keyframes bar-grow-3d {
+  0% {
+    transform: scaleY(0) translateZ(-30px) rotateX(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scaleY(1.1) translateZ(5px) rotateX(2deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scaleY(1) translateZ(0) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes area-fill-3d {
+  0% {
+    transform: scaleY(0) translateZ(-20px) rotateX(-5deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scaleY(1.05) translateZ(5px) rotateX(1deg);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scaleY(1) translateZ(0) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+/* Chart 3D effects */
+.chart-3d-container {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.chart-bar-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.4s ease;
+  animation: bar-grow-3d 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.chart-bar-3d:hover {
+  transform: translateZ(20px) scaleY(1.08) scaleX(1.02);
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3)) drop-shadow(0 0 15px rgba(0, 0, 0, 0.2));
+}
+
+.chart-area-3d {
+  transform-style: preserve-3d;
+  animation: area-fill-3d 0.8s ease-out;
+}
+
+.chart-line-3d {
+  transform-style: preserve-3d;
+  animation: slide-in-3d 0.6s ease-out;
+}
+
+/* Card with dark mode support */
+.card-3d-elevated {
+  transform: translateZ(20px);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  @apply bg-gradient-to-br from-white via-white to-neutral-background dark:from-slate-800 dark:via-slate-800 dark:to-slate-900;
+  @apply border border-neutral-border/50 dark:border-slate-700;
+  @apply text-neutral-text-primary dark:text-slate-100;
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .card-3d-elevated {
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.shadow-3d {
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.shadow-3d-hover {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.shadow-3d-hover:hover {
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transform: translateY(-5px) scale(1.02);
+}
+
+.glow-effect {
+  position: relative;
+}
+
+.glow-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.3), rgba(124, 58, 237, 0.3));
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glow-effect:hover::after {
+  opacity: 1;
+}
+
+/* Advanced 3D Transformations */
+.transform-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* Removed float-animation as requested - no pulsing animations */
+
+.slide-in-up {
+  animation: slideInUp 0.5s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) translateZ(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateZ(0);
+  }
+}
+
+.rotate-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+}
+
+.rotate-3d:hover {
+  transform: rotateY(5deg) rotateX(-2deg);
+}
+
+.neon-glow {
+  box-shadow: 
+    0 0 5px rgba(37, 99, 235, 0.5),
+    0 0 10px rgba(37, 99, 235, 0.3),
+    0 0 15px rgba(37, 99, 235, 0.2),
+    0 0 20px rgba(124, 58, 237, 0.1);
+}
+
+.neon-glow-hover:hover {
+  box-shadow: 
+    0 0 10px rgba(37, 99, 235, 0.8),
+    0 0 20px rgba(37, 99, 235, 0.6),
+    0 0 30px rgba(37, 99, 235, 0.4),
+    0 0 40px rgba(124, 58, 237, 0.3);
+}
+
+.gradient-border {
+  position: relative;
+  background: white;
+  border-radius: 16px;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 2px;
+  background: linear-gradient(135deg, #2563EB, #7C3AED, #10B981);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+.gradient-border:hover::before {
+  opacity: 0.6;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Removed pulse-3d animation as requested */
+
+.backdrop-3d {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark .backdrop-3d {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(71, 85, 105, 0.5);
+}
+
+/* Sidebar brand refinements (keep this style) */
+.wk-sidebar-brand {
+  padding: 10px 12px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(37,99,235,0.14), rgba(245,158,11,0.12));
+  border: 1px solid rgba(229,231,235,0.55);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
+}
+
+.wk-sidebar-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #000;
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+}
+
+.wk-sidebar-subtitle {
+  margin-top: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(17, 24, 39, 0.55);
+}
+
+/* Map 3D enhancements */
+.map-3d-container {
+  transform-style: preserve-3d;
+  perspective: 1200px;
+}
+
+.map-marker-glow {
+  filter: drop-shadow(0 0 8px currentColor);
+  animation: markerPulse 2s ease-in-out infinite;
+}
+
+@keyframes markerPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* Leaflet Map Styles – contido no bloco, sem extrapolar */
+.leaflet-container {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f0f0f0;
+  border-radius: 12px;
+  overflow: hidden !important;
+  max-width: 100%;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(37, 99, 235, 0.2);
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  padding: 0;
+}
+
+.leaflet-popup-tip {
+  background: white;
+}
+
+/* State hover popup styling */
+.state-hover-popup .leaflet-popup-content-wrapper {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(37, 99, 235, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(37, 99, 235, 0.1);
+  border-radius: 12px;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.state-hover-popup .leaflet-popup-content-wrapper:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(37, 99, 235, 0.2);
+  transform: translateY(-2px);
+}
+
+.state-hover-popup .leaflet-popup-content {
+  margin: 0;
+  padding: 12px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.state-hover-popup .leaflet-popup-tip {
+  background: rgba(255, 255, 255, 0.98);
+  border: 2px solid rgba(37, 99, 235, 0.3);
+  border-top: none;
+  border-left: none;
+}
+
+/* Remove selection box from Recharts Pie Chart */
+.recharts-pie-sector {
+  outline: none !important;
+}
+
+.recharts-active-shape {
+  outline: none !important;
+}
+
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}
+
+/* Remove any orange/yellow selection boxes from Recharts */
+.recharts-pie > g > rect,
+.recharts-pie > rect,
+.recharts-active-shape > rect,
+.recharts-wrapper > svg > rect[fill*="orange"],
+.recharts-wrapper > svg > rect[fill*="yellow"],
+.recharts-wrapper > svg > rect[stroke*="orange"],
+.recharts-wrapper > svg > rect[stroke*="yellow"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Landing Page Amazing Effects */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes pulse-slow-delayed {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+.animate-pulse-slow-delayed {
+  animation: pulse-slow-delayed 5s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.3;
+  }
+  33% {
+    transform: translateY(-30px) translateX(10px) scale(1.1);
+    opacity: 0.6;
+  }
+  66% {
+    transform: translateY(-15px) translateX(-10px) scale(0.9);
+    opacity: 0.4;
+  }
+}
+
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes ring-1 {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.5;
+  }
+}
+
+@keyframes ring-2 {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.4;
+  }
+}
+
+.animate-ring-1 {
+  animation: ring-1 4s ease-in-out infinite;
+}
+
+.animate-ring-2 {
+  animation: ring-2 5s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 5s ease infinite;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 1s ease-out 0.5s both;
+}
+
+.logo-container {
+  perspective: 1000px;
+}
+
+.logo-wrapper {
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+  animation: logo-float 6s ease-in-out infinite;
+}
+
+@keyframes logo-float {
+  0%, 100% {
+    transform: translateY(0) rotateY(0deg) scale(1);
+  }
+  25% {
+    transform: translateY(-10px) rotateY(2deg) scale(1.02);
+  }
+  50% {
+    transform: translateY(-5px) rotateY(0deg) scale(1.05);
+  }
+  75% {
+    transform: translateY(-10px) rotateY(-2deg) scale(1.02);
+  }
+}
+
+.logo-image {
+  filter: drop-shadow(0 10px 30px rgba(37, 99, 235, 0.3)) 
+          drop-shadow(0 0 20px rgba(245, 158, 11, 0.25))
+          drop-shadow(0 0 15px rgba(124, 58, 237, 0.2));
+  transition: filter 0.3s ease;
+}
+
+.logo-wrapper:hover .logo-image {
+  filter: drop-shadow(0 15px 40px rgba(37, 99, 235, 0.5)) 
+          drop-shadow(0 0 35px rgba(245, 158, 11, 0.4))
+          drop-shadow(0 0 30px rgba(124, 58, 237, 0.4))
+          drop-shadow(0 0 50px rgba(37, 99, 235, 0.2));
+}
+
+.logo-wrapper:hover {
+  transform: translateY(-5px) rotateY(5deg) scale(1.05);
+}
+
+.leaflet-control-zoom {
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  overflow: hidden;
+}
+
+.leaflet-control-zoom a {
+  background-color: white !important;
+  color: #2563EB !important;
+  border: 1px solid #E5E7EB !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+  margin: 2px !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background-color: #2563EB !important;
+  color: white !important;
+  transform: scale(1.05);
+}
+
+.leaflet-tile-container img {
+  border-radius: 0;
+}
+
+/* Personalizado – mapa 3D reforçado: plataforma elevada + estados em camadas */
+.map-personalizado-3d {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.12),
+    0 10px 20px -4px rgba(0, 0, 0, 0.15),
+    0 20px 40px -8px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(99, 102, 241, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transform: perspective(1400px) rotateX(2deg) translateZ(0);
+  transform-style: preserve-3d;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.map-personalizado-3d:hover {
+  box-shadow:
+    0 8px 12px -2px rgba(0, 0, 0, 0.14),
+    0 16px 28px -6px rgba(0, 0, 0, 0.18),
+    0 28px 56px -10px rgba(0, 0, 0, 0.24),
+    0 0 0 1px rgba(99, 102, 241, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transform: perspective(1400px) rotateX(2.5deg) translateZ(4px);
+}
+
+/* Custom Map (Personalizado) – base escura, estados em relevo, clicáveis */
+.custom-map-dark {
+  position: relative;
+  transform-style: preserve-3d;
+  perspective: 1400px;
+}
+
+.custom-map-dark .leaflet-tile-container img {
+  filter: brightness(0.95) contrast(1.05);
+  transition: filter 0.2s ease;
+}
+
+.custom-map-dark .dark-tiles {
+  filter: none;
+}
+
+.custom-map-dark .leaflet-interactive {
+  cursor: pointer;
+  transition: filter 0.25s ease, transform 0.25s ease;
+  outline: none !important;
+}
+
+/* Remove qualquer box de seleção/zoom do Leaflet */
+.custom-map-dark .leaflet-zoom-box,
+.custom-map-dark .leaflet-draw-toolbar,
+.leaflet-zoom-box,
+.leaflet-draw-toolbar {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Remove outline e qualquer box de seleção ao clicar em estados */
+.custom-map-dark .leaflet-interactive:focus,
+.custom-map-dark .leaflet-interactive:active,
+.custom-map-dark .leaflet-interactive:focus-visible {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove qualquer retângulo de seleção do Leaflet */
+.custom-map-dark .leaflet-container .leaflet-zoom-box,
+.custom-map-dark .leaflet-container .leaflet-draw-toolbar,
+.custom-map-dark .leaflet-container svg > rect[fill*="yellow"],
+.custom-map-dark .leaflet-container svg > rect[fill*="orange"],
+.custom-map-dark .leaflet-container svg > rect[stroke*="yellow"],
+.custom-map-dark .leaflet-container svg > rect[stroke*="orange"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Estados: camadas 3D – base (default), em relevo (highlighted), “se levanta” (selected) */
+.geo-state-default {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+}
+
+.geo-state-highlighted {
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35)) drop-shadow(0 4px 10px rgba(99, 102, 241, 0.2));
+}
+.geo-state-highlighted:hover {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4)) drop-shadow(0 6px 14px rgba(99, 102, 241, 0.3));
+}
+
+.geo-state-selected {
+  filter:
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4))
+    drop-shadow(0 6px 12px rgba(99, 102, 241, 0.35))
+    drop-shadow(0 12px 24px rgba(99, 102, 241, 0.25))
+    drop-shadow(0 20px 40px -8px rgba(0, 0, 0, 0.3));
+}
+.geo-state-selected:hover {
+  filter:
+    drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45))
+    drop-shadow(0 8px 16px rgba(99, 102, 241, 0.4))
+    drop-shadow(0 16px 32px rgba(99, 102, 241, 0.3))
+    drop-shadow(0 24px 48px -8px rgba(0, 0, 0, 0.35));
+}
+
+/* State label tooltips on GeoJSON (highlighted + hover) */
+.state-label-tooltip {
+  background: rgba(15, 23, 42, 0.9) !important;
+  border: 1px solid rgba(99, 102, 241, 0.4) !important;
+  border-radius: 8px !important;
+  color: #e2e8f0 !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 4px 10px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  max-width: none !important;
+}
+.state-label-tooltip::before {
+  border-top-color: rgba(99, 102, 241, 0.4) !important;
+}
+
+/* Custom Popup Styles */
+.custom-popup .leaflet-popup-content-wrapper {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(249, 250, 251, 0.98) 100%);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(37, 99, 235, 0.2);
+}
+
+/* Quote Section - Beautiful and Well-Worked */
+.quote-container {
+  position: relative;
+  perspective: 1000px;
+}
+
+.quote-wrapper {
+  position: relative;
+  transform-style: preserve-3d;
+  animation: quote-float 8s ease-in-out infinite;
+}
+
+@keyframes quote-float {
+  0%, 100% {
+    transform: translateY(0) rotateX(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotateX(1deg);
+  }
+}
+
+.quote-text {
+  position: relative;
+  z-index: 10;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.quote-gradient {
+  color: rgba(17, 24, 39, 0.95);
+  text-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.06),
+    0 0 20px rgba(37, 99, 235, 0.1);
+  transition: color 0.5s ease, text-shadow 0.5s ease;
+}
+
+.dark .quote-gradient {
+  color: rgba(241, 245, 249, 0.95);
+  text-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 1px 4px rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(59, 130, 246, 0.2);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+
+.quote-mark-left,
+.quote-mark-right {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  line-height: 1;
+  animation: quote-mark-pulse 3s ease-in-out infinite;
+  color: rgba(107, 114, 128, 0.25);
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.05));
+}
+
+.quote-mark-left {
+  animation-delay: 0s;
+}
+
+.quote-mark-right {
+  animation-delay: 1.5s;
+}
+
+@keyframes quote-mark-pulse {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.05);
+  }
+}
+
+.quote-border {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  position: relative;
+  z-index: 1;
+}
+
+.quote-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 2xl;
+  padding: 1px;
+  background: linear-gradient(135deg, 
+    rgba(37, 99, 235, 0.2), 
+    rgba(229, 231, 235, 0.3),
+    rgba(37, 99, 235, 0.2));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
+}
+
+.quote-glow {
+  background: radial-gradient(ellipse at center,
+    rgba(37, 99, 235, 0.08) 0%,
+    rgba(229, 231, 235, 0.05) 30%,
+    transparent 70%);
+  filter: blur(20px);
+  animation: quote-glow-pulse 4s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes quote-glow-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.quote-wrapper:hover .quote-gradient {
+  text-shadow: 
+    0 3px 12px rgba(0, 0, 0, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.08),
+    0 0 30px rgba(37, 99, 235, 0.15);
+  color: rgba(17, 24, 39, 1);
+}
+
+.dark .quote-wrapper:hover .quote-gradient {
+  text-shadow: 
+    0 3px 12px rgba(0, 0, 0, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(59, 130, 246, 0.25);
+  color: rgba(241, 245, 249, 1);
+}
+
+.quote-wrapper:hover {
+  transform: translateY(-4px) rotateX(2deg) scale(1.02);
+}
