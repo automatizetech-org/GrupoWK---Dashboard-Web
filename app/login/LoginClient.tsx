@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
-import { Lock, Loader2, AlertCircle } from 'lucide-react'
+import { Lock, Loader2, AlertCircle, Shield } from 'lucide-react'
 
 export default function LoginClient() {
   const router = useRouter()
@@ -118,6 +118,17 @@ export default function LoginClient() {
             )}
           </button>
         </form>
+
+        <div className="mt-6 flex items-center justify-center">
+          <button
+            type="button"
+            onClick={() => router.push('/admin')}
+            className="text-sm text-neutral-700 dark:text-neutral-300 hover:text-primary-blue font-semibold inline-flex items-center gap-2 transition-colors"
+          >
+            <Shield size={16} />
+            Admin
+          </button>
+        </div>
 
       </div>
     </div>
