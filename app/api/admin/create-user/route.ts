@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { hashPassword, verifyPassword } from '@/lib/auth'
+import { getSessionCookieName, hashPassword, verifySession } from '@/lib/auth'
 import { assertSameOrigin, rateLimit, sleep } from '@/lib/security'
 
 export async function POST(request: NextRequest) {
@@ -15,17 +15,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Muitas tentativas. Tente novamente em instantes.' }, { status: 429 })
     }
 
+    // Exigir admin logado (cookie httpOnly)
+    const token = request.cookies.get(getSessionCookieName())?.value
+    const session = token ? await verifySession(token) : null
+    if (!session || session.role !== 'admin') {
+      await sleep(250)
+      return NextResponse.json({ success: false, error: 'Não autorizado' }, { status: 401 })
+    }
+
     const body = await request.json()
-    const { adminUsername, adminPassword, newUsername, newPassword } = body ?? {}
+    const { newUsername, newPassword } = body ?? {}
 
     if (
-      !adminUsername || typeof adminUsername !== 'string' ||
-      !adminPassword || typeof adminPassword !== 'string' ||
       !newUsername || typeof newUsername !== 'string' ||
       !newPassword || typeof newPassword !== 'string'
     ) {
       return NextResponse.json(
-        { success: false, error: 'Campos obrigatórios: adminUsername, adminPassword, newUsername, newPassword' },
+        { success: false, error: 'Campos obrigatórios: newUsername, newPassword' },
         { status: 400 }
       )
     }
@@ -37,8 +43,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const adminUser = adminUsername.trim().toLowerCase()
-    const adminPass = adminPassword
     const user = newUsername.trim().toLowerCase()
     const pass = newPassword
 
@@ -47,24 +51,6 @@ export async function POST(request: NextRequest) {
     }
     if (pass.length < 6) {
       return NextResponse.json({ success: false, error: 'Senha precisa ter pelo menos 6 caracteres' }, { status: 400 })
-    }
-
-    // Validar admin
-    const { data: adminRow, error: adminErr } = await supabaseAdmin
-      .from('admins')
-      .select('username, password_hash')
-      .eq('username', adminUser)
-      .maybeSingle()
-
-    if (adminErr) return NextResponse.json({ success: false, error: adminErr.message }, { status: 500 })
-    if (!adminRow?.password_hash) {
-      await sleep(350)
-      return NextResponse.json({ success: false, error: 'Credenciais de ADM inválidas' }, { status: 401 })
-    }
-    const ok = await verifyPassword(adminPass, adminRow.password_hash)
-    if (!ok) {
-      await sleep(350)
-      return NextResponse.json({ success: false, error: 'Credenciais de ADM inválidas' }, { status: 401 })
     }
 
     // Criar usuário
