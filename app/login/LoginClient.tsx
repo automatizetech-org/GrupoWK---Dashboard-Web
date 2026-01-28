@@ -269,7 +269,7 @@ export default function LoginClient() {
           </div>
           <div className="text-left">
             <div className="text-sm text-neutral-500 dark:text-neutral-400 font-medium">WK • Dashboard Web</div>
-            <h1 className="text-2xl font-extrabold bg-gradient-to-r from-red-600 via-primary-blue to-blue-600 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white">
               Login
             </h1>
           </div>
