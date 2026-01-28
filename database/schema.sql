@@ -1,5 +1,10 @@
--- Schema do banco de dados Supabase para o Dashboard System
 -- Execute este script no SQL Editor do Supabase
+--
+-- Objetivo: ter UM ÚNICO arquivo que, ao rodar em um projeto novo do Supabase,
+-- cria TODAS as tabelas e estruturas necessárias para o dashboard web atual.
+
+-- Extensão para UUID (normalmente já habilitada no Supabase, mas não custa garantir)
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Tabela de Empresas
 CREATE TABLE IF NOT EXISTS companies (
@@ -86,6 +91,36 @@ CREATE INDEX IF NOT EXISTS idx_accounts_payable_pdf_is_new ON accounts_payable_p
 CREATE INDEX IF NOT EXISTS idx_accounts_payable_pdf_clients_data ON accounts_payable_pdf_data USING GIN(clients_data);
 CREATE INDEX IF NOT EXISTS idx_accounts_payable_pdf_automation ON accounts_payable_pdf_data(automation_id);
 
+-- RLS para accounts_payable_pdf_data
+-- Leitura pública; escrita somente com service_role (usada pelo backend do dashboard)
+ALTER TABLE accounts_payable_pdf_data ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "accounts_payable_pdf_select_public" ON accounts_payable_pdf_data;
+CREATE POLICY "accounts_payable_pdf_select_public"
+ON accounts_payable_pdf_data
+FOR SELECT
+USING (true);
+
+DROP POLICY IF EXISTS "accounts_payable_pdf_insert_service_role" ON accounts_payable_pdf_data;
+CREATE POLICY "accounts_payable_pdf_insert_service_role"
+ON accounts_payable_pdf_data
+FOR INSERT
+USING (auth.role() = 'service_role')
+WITH CHECK (auth.role() = 'service_role');
+
+DROP POLICY IF EXISTS "accounts_payable_pdf_update_service_role" ON accounts_payable_pdf_data;
+CREATE POLICY "accounts_payable_pdf_update_service_role"
+ON accounts_payable_pdf_data
+FOR UPDATE
+USING (auth.role() = 'service_role')
+WITH CHECK (auth.role() = 'service_role');
+
+DROP POLICY IF EXISTS "accounts_payable_pdf_delete_service_role" ON accounts_payable_pdf_data;
+CREATE POLICY "accounts_payable_pdf_delete_service_role"
+ON accounts_payable_pdf_data
+FOR DELETE
+USING (auth.role() = 'service_role');
+
 -- Tabela de Folha de Pagamento
 CREATE TABLE IF NOT EXISTS payroll_data (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -116,6 +151,48 @@ CREATE INDEX IF NOT EXISTS idx_payroll_data_company ON payroll_data(company_id);
 CREATE INDEX IF NOT EXISTS idx_payroll_data_period ON payroll_data(period);
 CREATE INDEX IF NOT EXISTS idx_payroll_data_date ON payroll_data(date);
 
+-- Tabela de autenticação - administradores (login do dashboard)
+CREATE TABLE IF NOT EXISTS admins (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  username TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Tabela de autenticação - usuários comuns
+CREATE TABLE IF NOT EXISTS users (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  username TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_admins_username ON admins(username);
+CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
+
+-- Tabela de dados consolidados de automação XML (usada por getTaxData e pelo script Python)
+CREATE TABLE IF NOT EXISTS automation_data (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
+  automation_id TEXT NOT NULL REFERENCES automations(id),
+  date DATE,
+  metadata JSONB DEFAULT '{}'::jsonb,
+  -- Contadores genéricos (para compatibilidade com versões antigas)
+  count_1 INTEGER DEFAULT 0,
+  count_2 INTEGER DEFAULT 0,
+  count_3 INTEGER DEFAULT 0,
+  -- Valores financeiros genéricos
+  amount_1 DECIMAL(10,2) DEFAULT 0,
+  amount_2 DECIMAL(10,2) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_automation_data_company_id ON automation_data(company_id);
+CREATE INDEX IF NOT EXISTS idx_automation_data_automation_id ON automation_data(automation_id);
+CREATE INDEX IF NOT EXISTS idx_automation_data_date ON automation_data(date);
+CREATE INDEX IF NOT EXISTS idx_automation_data_updated_at ON automation_data(updated_at);
+
 -- Dados iniciais (opcional)
 INSERT INTO departments (id, name, description) VALUES
   ('fiscal', 'Fiscal', 'Departamento Fiscal - Gestão de documentos fiscais'),
@@ -124,7 +201,8 @@ INSERT INTO departments (id, name, description) VALUES
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO automations (id, department_id, name, description, type) VALUES
-  ('xml-siefiaz', 'fiscal', 'XML e CFiles - S-E-F-I-A-Z', 'Automação para processamento de XML e CFiles do sistema S-E-F-I-A-Z', 'xml_processing'),
+  -- IMPORTANTE: o dashboard e o script Python usam automation_id = 'xml-sefaz'
+  ('xml-sefaz', 'fiscal', 'XML SEFAZ', 'Automação para processamento de XML do SEFAZ', 'xml_processing'),
   ('contas-pagar', 'financeiro', 'Contas a Pagar', 'Automação de contas a pagar', 'accounts_payable'),
   ('folha-pagamento', 'rh', 'Folha de Pagamento', 'Automação de folha de pagamento', 'payroll')
 ON CONFLICT (id) DO NOTHING;
