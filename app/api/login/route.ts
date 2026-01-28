@@ -1,11 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { getSessionCookieName, signSession, verifyPassword } from '@/lib/auth'
+import { assertSameOrigin, rateLimit, sleep } from '@/lib/security'
 
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7 // 7 dias
 
 export async function POST(request: NextRequest) {
   try {
+    // Bloqueia chamadas cross-site (defesa simples contra abuso)
+    if (process.env.NODE_ENV === 'production' && !assertSameOrigin(request)) {
+      return NextResponse.json({ success: false, error: 'Requisição inválida' }, { status: 403 })
+    }
+
+    // Rate limit anti brute-force (por IP)
+    const rl = rateLimit(request, 'login', 20, 60_000) // 20/min
+    if (!rl.ok) {
+      return NextResponse.json({ success: false, error: 'Muitas tentativas. Tente novamente em instantes.' }, { status: 429 })
+    }
+
     const body = await request.json()
     const { username, password } = body ?? {}
 
@@ -36,7 +48,10 @@ export async function POST(request: NextRequest) {
 
     if (adminRow?.password_hash) {
       const ok = await verifyPassword(pass, adminRow.password_hash)
-      if (!ok) return NextResponse.json({ success: false, error: 'Usuário ou senha incorretos' }, { status: 401 })
+      if (!ok) {
+        await sleep(350)
+        return NextResponse.json({ success: false, error: 'Usuário ou senha incorretos' }, { status: 401 })
+      }
 
       const token = await signSession({ sub: user, role: 'admin' }, COOKIE_MAX_AGE)
       const res = NextResponse.json({ success: true, role: 'admin' })
@@ -62,11 +77,15 @@ export async function POST(request: NextRequest) {
     }
 
     if (!userRow?.password_hash) {
+      await sleep(250)
       return NextResponse.json({ success: false, error: 'Usuário ou senha incorretos' }, { status: 401 })
     }
 
     const ok = await verifyPassword(pass, userRow.password_hash)
-    if (!ok) return NextResponse.json({ success: false, error: 'Usuário ou senha incorretos' }, { status: 401 })
+    if (!ok) {
+      await sleep(350)
+      return NextResponse.json({ success: false, error: 'Usuário ou senha incorretos' }, { status: 401 })
+    }
 
     const token = await signSession({ sub: user, role: 'user' }, COOKIE_MAX_AGE)
     const response = NextResponse.json({ success: true, role: 'user' })
@@ -81,7 +100,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Erro no login:', error)
     return NextResponse.json(
-      { success: false, error: (error as any)?.message || 'Erro ao processar login' },
+      { success: false, error: process.env.NODE_ENV === 'production' ? 'Erro ao processar login' : ((error as any)?.message || 'Erro ao processar login') },
       { status: 500 }
     )
   }
