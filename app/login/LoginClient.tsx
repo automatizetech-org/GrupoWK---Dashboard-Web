@@ -8,13 +8,19 @@ import { Lock, Loader2, AlertCircle, Shield } from 'lucide-react'
 export default function LoginClient() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const from = searchParams.get('from') || '/'
-  const isAdminTarget = from === '/admin'
+  const fromParam = searchParams.get('from') || '/'
+  const [targetPath, setTargetPath] = useState(fromParam)
+  const isAdminTarget = targetPath === '/admin'
 
   // Prefetch para não "travar" no primeiro clique (dev/produção)
   useEffect(() => {
     router.prefetch('/admin')
   }, [router])
+
+  // Sincroniza targetPath quando a URL mudar
+  useEffect(() => {
+    setTargetPath(fromParam)
+  }, [fromParam])
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -36,7 +42,7 @@ export default function LoginClient() {
         setError(data.error || 'Usuário ou senha incorretos')
         return
       }
-      router.push(from)
+      router.push(targetPath || '/')
       router.refresh()
     } catch {
       setError('Erro ao conectar. Tente novamente.')
@@ -132,7 +138,9 @@ export default function LoginClient() {
             onClick={() => {
               // Não navega para /admin (evita compilação pesada/redirect em dev).
               // Apenas define o destino pós-login como /admin.
-              router.replace(isAdminTarget ? '/login' : '/login?from=/admin')
+              const next = isAdminTarget ? '/' : '/admin'
+              setTargetPath(next)
+              router.replace(next === '/admin' ? '/login?from=/admin' : '/login')
             }}
             className="group inline-flex items-center gap-2 rounded-full border border-neutral-200/80 dark:border-neutral-700/70 bg-white/70 dark:bg-neutral-800/40 px-4 py-2 text-sm font-semibold text-neutral-800 dark:text-neutral-200 shadow-sm hover:shadow-md transition-all hover:border-primary-blue/40 hover:text-primary-blue"
           >
