@@ -1,9 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { hashPassword, verifyPassword } from '@/lib/auth'
+import { assertSameOrigin, rateLimit, sleep } from '@/lib/security'
 
 export async function POST(request: NextRequest) {
   try {
+    if (process.env.NODE_ENV === 'production' && !assertSameOrigin(request)) {
+      return NextResponse.json({ success: false, error: 'Requisição inválida' }, { status: 403 })
+    }
+
+    // Rate limit para proteger credenciais ADM (por IP)
+    const rl = rateLimit(request, 'admin_create_user', 10, 60_000) // 10/min
+    if (!rl.ok) {
+      return NextResponse.json({ success: false, error: 'Muitas tentativas. Tente novamente em instantes.' }, { status: 429 })
+    }
+
     const body = await request.json()
     const { adminUsername, adminPassword, newUsername, newPassword } = body ?? {}
 
@@ -47,10 +58,14 @@ export async function POST(request: NextRequest) {
 
     if (adminErr) return NextResponse.json({ success: false, error: adminErr.message }, { status: 500 })
     if (!adminRow?.password_hash) {
+      await sleep(350)
       return NextResponse.json({ success: false, error: 'Credenciais de ADM inválidas' }, { status: 401 })
     }
     const ok = await verifyPassword(adminPass, adminRow.password_hash)
-    if (!ok) return NextResponse.json({ success: false, error: 'Credenciais de ADM inválidas' }, { status: 401 })
+    if (!ok) {
+      await sleep(350)
+      return NextResponse.json({ success: false, error: 'Credenciais de ADM inválidas' }, { status: 401 })
+    }
 
     // Criar usuário
     const password_hash = await hashPassword(pass)
@@ -65,7 +80,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (e: any) {
-    return NextResponse.json({ success: false, error: e?.message || 'Erro ao criar usuário' }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: process.env.NODE_ENV === 'production' ? 'Erro ao criar usuário' : (e?.message || 'Erro ao criar usuário') },
+      { status: 500 }
+    )
   }
 }
 
