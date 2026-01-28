@@ -467,9 +467,8 @@ export default function CompanyMap({ selectedCompanyIds = [], dateRange }: Compa
         
         {/* Map Container – contido no bloco; 3D reforçado só no Personalizado */}
         <div
-          className={`rounded-lg md:rounded-xl overflow-hidden border-2 border-primary-blue/20 relative w-full min-w-0 ${selectedLayer === 'custom' ? 'map-personalizado-3d' : 'shadow-2xl'}`}
+          className={`rounded-lg md:rounded-xl overflow-hidden border-2 border-primary-blue/20 relative w-full min-w-0 md:h-[500px] lg:h-[600px] ${selectedLayer === 'custom' ? 'map-personalizado-3d' : 'shadow-2xl'}`}
           style={{ height: '400px', maxWidth: '100%' }}
-          className="md:h-[500px] lg:h-[600px]"
         >
           {/* Layer Selector - Compact */}
           <div className="absolute top-2 right-2 md:top-4 md:right-4 z-[1000] bg-gradient-to-br from-white/95 via-white/90 to-white/95 backdrop-blur-xl rounded-lg md:rounded-xl p-1.5 md:p-2 shadow-lg border border-primary-blue/20 card-3d">
