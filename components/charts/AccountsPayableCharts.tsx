@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { type AccountsPayableData } from '@/lib/data'
 import {
   PieChart,
@@ -21,6 +21,15 @@ interface AccountsPayableChartsProps {
 }
 
 export default function AccountsPayableCharts({ data }: AccountsPayableChartsProps) {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const update = () => setIsMobile(window.innerWidth < 768)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+
   if (!data || data.length === 0) {
     return (
       <div className="text-center p-8 text-neutral-text-secondary dark:text-slate-400">
@@ -169,15 +178,21 @@ export default function AccountsPayableCharts({ data }: AccountsPayableChartsPro
   const chartColors = ['#10B981', '#EF4444'] // Apenas Pagas e Vencidas
   const daysOverdueColors = ['#3B82F6', '#8B5CF6', '#EC4899', '#F59E0B', '#EF4444']
 
+  const mobileClientData = useMemo(() => {
+    // No mobile, limita para manter legível (top clientes por total)
+    const max = 12
+    return clientData.slice(0, max)
+  }, [clientData])
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-      <div className="card-3d-elevated rounded-2xl p-8 shadow-3d relative overflow-hidden">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6">
+      <div className="card-3d-elevated rounded-xl md:rounded-2xl p-4 md:p-8 shadow-3d relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5 dark:from-primary-blue/10 dark:to-secondary-purple/10"></div>
-        <h3 className="text-xl font-bold text-neutral-text-primary dark:text-slate-100 mb-6 flex items-center gap-2 relative z-10">
-          <div className="w-1 h-6 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full shadow-lg"></div>
-          Status das Contas
+        <h3 className="text-base md:text-xl font-bold text-neutral-text-primary dark:text-slate-100 mb-3 md:mb-6 flex items-center gap-2 relative z-10">
+          <div className="w-1 h-5 md:h-6 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full shadow-lg"></div>
+          <span className="break-words">Status das Contas</span>
         </h3>
-        <ResponsiveContainer width="100%" height={350}>
+        <ResponsiveContainer width="100%" height={isMobile ? 320 : 350}>
           <PieChart style={{ filter: 'drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.15))' }}>
             <defs>
               {statusData.map((entry, index) => (
@@ -204,14 +219,13 @@ export default function AccountsPayableCharts({ data }: AccountsPayableChartsPro
               cx="50%"
               cy="50%"
               labelLine={false}
-              label={({ name, percent, value }) => 
-                `${name}\n${(percent * 100).toFixed(1)}%\n(${value})`
-              }
-              outerRadius={130}
-              innerRadius={60}
+              // No mobile, remove labels (evita cortar %) e usa tooltip/legend
+              label={isMobile ? false : ({ name, percent, value }) => `${name}\n${(percent * 100).toFixed(1)}%\n(${value})`}
+              outerRadius={isMobile ? 110 : 130}
+              innerRadius={isMobile ? 52 : 60}
               fill="#8884d8"
               dataKey="value"
-              paddingAngle={4}
+              paddingAngle={isMobile ? 2 : 4}
               animationDuration={1000}
               isAnimationActive={true}
             >
@@ -235,17 +249,24 @@ export default function AccountsPayableCharts({ data }: AccountsPayableChartsPro
               labelStyle={{ color: 'var(--ap-tooltip-text)' }}
               itemStyle={{ color: 'var(--ap-tooltip-text)' }}
             />
+            {isMobile && (
+              <Legend
+                verticalAlign="bottom"
+                wrapperStyle={{ paddingTop: 8, fontSize: 12 }}
+                iconType="circle"
+              />
+            )}
           </PieChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="card-3d-elevated rounded-2xl p-8 shadow-3d relative overflow-hidden rotate-3d">
+      <div className="card-3d-elevated rounded-xl md:rounded-2xl p-4 md:p-8 shadow-3d relative overflow-hidden rotate-3d">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5 dark:from-primary-blue/10 dark:to-secondary-purple/10"></div>
-        <h3 className="text-xl font-bold text-neutral-text-primary dark:text-slate-100 mb-6 flex items-center gap-2 relative z-10">
-          <div className="w-1 h-6 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full shadow-lg"></div>
-          Dias Vencidos
+        <h3 className="text-base md:text-xl font-bold text-neutral-text-primary dark:text-slate-100 mb-3 md:mb-6 flex items-center gap-2 relative z-10">
+          <div className="w-1 h-5 md:h-6 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full shadow-lg"></div>
+          <span className="break-words">Dias Vencidos</span>
         </h3>
-        <ResponsiveContainer width="100%" height={350}>
+        <ResponsiveContainer width="100%" height={isMobile ? 300 : 350}>
           <BarChart data={daysOverdueData}>
             <XAxis dataKey="name" stroke="var(--ap-chart-axis)" fontSize={12} />
             <YAxis stroke="var(--ap-chart-axis)" fontSize={12} />
@@ -265,53 +286,110 @@ export default function AccountsPayableCharts({ data }: AccountsPayableChartsPro
         </ResponsiveContainer>
       </div>
 
-      <div className="card-3d-elevated rounded-2xl p-3 shadow-3d relative overflow-hidden lg:col-span-2">
+      <div className="card-3d-elevated rounded-xl md:rounded-2xl p-3 md:p-6 shadow-3d relative overflow-hidden lg:col-span-2">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5 dark:from-primary-blue/10 dark:to-secondary-purple/10"></div>
-        <h3 className="text-xl font-bold text-neutral-text-primary dark:text-slate-100 mb-2 flex items-center gap-2 relative z-10">
-          <div className="w-1 h-6 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full shadow-lg"></div>
-          Contas por Cliente
-        </h3>
-        <ResponsiveContainer width="100%" height={780}>
-          <BarChart data={clientData} margin={{ top: 10, right: 20, left: 10, bottom: 160 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--ap-chart-grid)" opacity={0.55} />
-            <XAxis 
-              dataKey="name" 
-              stroke="var(--ap-chart-axis)" 
-              fontSize={14} 
-              angle={-45} 
-              textAnchor="end" 
-              height={160}
-              dy={8}
-              interval={0}
-            />
-            <YAxis stroke="var(--ap-chart-axis)" fontSize={12} />
-            <Tooltip
-              formatter={(value: number) => [`R$ ${value.toLocaleString('pt-BR')}`, undefined]}
-              content={({ active, payload, label }) => {
-                if (!active || !payload?.length) return null
-                return (
-                  <div
-                    className="rounded-xl border px-4 py-3 shadow-lg"
-                    style={{
-                      backgroundColor: 'var(--ap-tooltip-bg)',
-                      borderColor: 'var(--ap-tooltip-border)',
-                    }}
-                  >
-                    <p className="font-semibold mb-2" style={{ color: 'var(--ap-tooltip-text)' }}>{label}</p>
-                    {payload.map((entry) => (
-                      <p key={entry.dataKey} className="text-sm font-medium" style={{ color: entry.name === 'Vencidas' ? '#EF4444' : '#10B981' }}>
-                        {entry.name}: R$ {Number(entry.value).toLocaleString('pt-BR')}
+        <div className="flex items-center justify-between gap-2 relative z-10 mb-2">
+          <h3 className="text-base md:text-xl font-bold text-neutral-text-primary dark:text-slate-100 flex items-center gap-2">
+            <div className="w-1 h-5 md:h-6 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full shadow-lg"></div>
+            <span className="break-words">Contas por Cliente</span>
+          </h3>
+          {isMobile && clientData.length > mobileClientData.length && (
+            <span className="text-[11px] text-neutral-text-secondary dark:text-slate-400 whitespace-nowrap">
+              Top {mobileClientData.length}
+            </span>
+          )}
+        </div>
+
+        {isMobile ? (
+          // Mobile: barras horizontais (nomes ficam legíveis, sem empilhar)
+          <ResponsiveContainer width="100%" height={Math.max(420, mobileClientData.length * 46)}>
+            <BarChart
+              data={mobileClientData}
+              layout="vertical"
+              margin={{ top: 10, right: 16, left: 8, bottom: 10 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--ap-chart-grid)" opacity={0.55} />
+              <XAxis
+                type="number"
+                stroke="var(--ap-chart-axis)"
+                fontSize={11}
+                tickFormatter={(v) => {
+                  const value = Number(v) || 0
+                  if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`
+                  if (value >= 1000) return `${(value / 1000).toFixed(0)}k`
+                  return value.toString()
+                }}
+              />
+              <YAxis
+                type="category"
+                dataKey="name"
+                width={120}
+                stroke="var(--ap-chart-axis)"
+                fontSize={11}
+                tick={{ fill: 'var(--ap-chart-axis)' }}
+              />
+              <Tooltip
+                formatter={(value: number) => [`R$ ${Number(value).toLocaleString('pt-BR')}`, undefined]}
+                contentStyle={{
+                  backgroundColor: 'var(--ap-tooltip-bg)',
+                  border: '1px solid var(--ap-tooltip-border)',
+                  color: 'var(--ap-tooltip-text)',
+                  borderRadius: 12,
+                }}
+                labelStyle={{ color: 'var(--ap-tooltip-text)' }}
+                itemStyle={{ color: 'var(--ap-tooltip-text)' }}
+              />
+              <Legend verticalAlign="bottom" wrapperStyle={{ paddingTop: 8, fontSize: 12 }} />
+              <Bar dataKey="paid" fill="#10B981" name="Pagas" radius={[0, 8, 8, 0]} />
+              <Bar dataKey="overdue" fill="#EF4444" name="Vencidas" radius={[0, 8, 8, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          // Desktop: mantém o gráfico atual
+          <ResponsiveContainer width="100%" height={780}>
+            <BarChart data={clientData} margin={{ top: 10, right: 20, left: 10, bottom: 160 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--ap-chart-grid)" opacity={0.55} />
+              <XAxis
+                dataKey="name"
+                stroke="var(--ap-chart-axis)"
+                fontSize={14}
+                angle={-45}
+                textAnchor="end"
+                height={160}
+                dy={8}
+                interval={0}
+              />
+              <YAxis stroke="var(--ap-chart-axis)" fontSize={12} />
+              <Tooltip
+                formatter={(value: number) => [`R$ ${value.toLocaleString('pt-BR')}`, undefined]}
+                content={({ active, payload, label }) => {
+                  if (!active || !payload?.length) return null
+                  return (
+                    <div
+                      className="rounded-xl border px-4 py-3 shadow-lg"
+                      style={{
+                        backgroundColor: 'var(--ap-tooltip-bg)',
+                        borderColor: 'var(--ap-tooltip-border)',
+                      }}
+                    >
+                      <p className="font-semibold mb-2" style={{ color: 'var(--ap-tooltip-text)' }}>
+                        {label}
                       </p>
-                    ))}
-                  </div>
-                )
-              }}
-            />
-            <Legend verticalAlign="bottom" wrapperStyle={{ marginBottom: -120, paddingTop: 0 }} />
-            <Bar dataKey="paid" fill="#10B981" name="Pagas" radius={[8, 8, 0, 0]} />
-            <Bar dataKey="overdue" fill="#EF4444" name="Vencidas" radius={[8, 8, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
+                      {payload.map((entry) => (
+                        <p key={String(entry.dataKey)} className="text-sm font-medium" style={{ color: entry.name === 'Vencidas' ? '#EF4444' : '#10B981' }}>
+                          {entry.name}: R$ {Number(entry.value).toLocaleString('pt-BR')}
+                        </p>
+                      ))}
+                    </div>
+                  )
+                }}
+              />
+              <Legend verticalAlign="bottom" wrapperStyle={{ marginBottom: -120, paddingTop: 0 }} />
+              <Bar dataKey="paid" fill="#10B981" name="Pagas" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="overdue" fill="#EF4444" name="Vencidas" radius={[8, 8, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
       </div>
     </div>
   )
