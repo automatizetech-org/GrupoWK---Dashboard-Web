@@ -42,8 +42,9 @@ export default function LoginClient() {
         setError(data.error || 'Usuário ou senha incorretos')
         return
       }
-      router.push(targetPath || '/')
-      router.refresh()
+      // Redireciona com reload para garantir que o cookie de sessão (httpOnly)
+      // já esteja válido na primeira navegação (evita precisar clicar 2x).
+      window.location.assign(targetPath || '/')
     } catch {
       setError('Erro ao conectar. Tente novamente.')
     } finally {
