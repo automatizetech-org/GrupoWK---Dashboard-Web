@@ -12,6 +12,7 @@ A Vercel é a plataforma oficial do Next.js e tem plano **grátis** (Hobby). O c
 2. **Suba o projeto no GitHub** (se ainda não estiver):
    - Crie um repositório no GitHub.
    - No seu computador, na pasta do projeto:
+
      ```bash
      git init
      git add .
@@ -30,10 +31,10 @@ A Vercel é a plataforma oficial do Next.js e tem plano **grátis** (Hobby). O c
    No projeto na Vercel: **Settings** → **Environment Variables** e adicione:
 
    | Nome | Valor | Observação |
-   |------|--------|------------|
-   | `DASHBOARD_ACCESS_PASSWORD` | **sua senha de acesso** | Quem tiver essa senha pode entrar. Escolha uma senha forte e envie só para o cliente/pessoas autorizadas. |
+   | --- | --- | --- |
+   | `SESSION_SECRET` | **um segredo forte** | Necessário para assinar o cookie de sessão (login). Use 32+ caracteres aleatórios. |
    | `NEXT_PUBLIC_SUPABASE_URL` | (igual ao seu `.env` local) | URL do projeto Supabase. |
-   | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | (igual ao seu `.env` local) | Chave anônima do Supabase. |
+   | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | (igual ao seu `.env` local) | Chave anônima do projeto Supabase. |
    | `SUPABASE_SERVICE_ROLE_KEY` | (igual ao seu `.env` local) | Chave de service role do Supabase (para API de contas a pagar). |
 
    Depois de salvar, faça um **Redeploy** do projeto (Deployments → ⋮ no último deploy → Redeploy).
@@ -47,35 +48,33 @@ A Vercel é a plataforma oficial do Next.js e tem plano **grátis** (Hobby). O c
 
 ## 2. Controle de acesso (permissão)
 
-O dashboard já está com **proteção por senha**:
+O dashboard agora está com **tela de login (usuário/senha)**:
 
 - Quem acessar o link da Vercel cai na **tela de login**.
-- Só entra quem digitar a **senha** que você definiu em `DASHBOARD_ACCESS_PASSWORD`.
-- A senha fica guardada em cookie por **7 dias**; depois a pessoa precisa digitar de novo.
+- Só entra quem tiver usuário/senha cadastrados no Supabase.
+- A sessão fica guardada em cookie por **7 dias**; depois a pessoa precisa logar de novo.
 - No canto superior direito há o botão **Sair** para encerrar o acesso naquele navegador.
 
 **Como dar acesso ao cliente (ou outras pessoas):**
 
-1. Defina uma senha forte em `DASHBOARD_ACCESS_PASSWORD` na Vercel.  
-2. Envie para o cliente (por e-mail, WhatsApp, etc.):  
+1. No próprio dashboard existe a opção **Cadastrar novo usuário** (exige credenciais de ADM).  
+2. Envie para o cliente:  
    - O **link** do site (ex.: `https://seu-projeto.vercel.app`).  
-   - A **senha** de acesso.  
-3. Ele abre o link, digita a senha uma vez e usa o dashboard.  
-4. Se quiser trocar a senha depois, altere `DASHBOARD_ACCESS_PASSWORD` na Vercel e faça **Redeploy**; a nova senha vale para todos.
+   - O **usuário** e **senha** criados para ele.
 
 **Desenvolvimento local:**  
-Se você **não** definir `DASHBOARD_ACCESS_PASSWORD` no `.env` local, o middleware deixa todo mundo entrar (sem tela de login). Assim você desenvolve sem precisar logar. Em **produção** na Vercel, **sempre** defina essa variável para manter o acesso restrito.
+Você precisa configurar `SESSION_SECRET` + variáveis do Supabase no `.env` local (ou `.env` no Vercel).
 
 ---
 
 ## 3. Resumo
 
 | O que | Como |
-|-------|------|
+| --- | --- |
 | Subir na internet de graça | Vercel (conta grátis, deploy pelo GitHub). |
-| Cliente acessar | Enviar o link do site + a senha. |
-| Permissão / segurança | Só quem tem a senha (`DASHBOARD_ACCESS_PASSWORD`) entra. |
-| Trocar senha | Alterar a variável na Vercel e dar Redeploy. |
+| Cliente acessar | Enviar o link do site + usuário/senha. |
+| Permissão / segurança | Login por usuário/senha (armazenados no Supabase). |
+| Trocar senha | Alterar a senha do usuário no Supabase (ou criar outro usuário). |
 | Sair do dashboard | Botão **Sair** no canto superior direito. |
 
-Se quiser no futuro **login por usuário** (cada pessoa com seu e-mail e senha), dá para integrar **Supabase Auth** e uma tela de login; a proteção por uma senha única já resolve para “só quem eu autorizar acessa”.
+Se quiser no futuro, dá para evoluir para **Supabase Auth** (login por e-mail, recuperação de senha, etc.).

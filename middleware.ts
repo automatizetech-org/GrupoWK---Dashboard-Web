@@ -1,21 +1,19 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { getSessionCookieName, verifySession } from '@/lib/auth'
 
-const COOKIE_NAME = 'dashboard_access'
 const LOGIN_PATH = '/login'
-
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(password)
-  const hash = await crypto.subtle.digest('SHA-256', data)
-  return btoa(String.fromCharCode(...new Uint8Array(hash)))
-}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Sempre permitir a rota de login e a API de login
-  if (pathname === LOGIN_PATH || pathname.startsWith('/api/login')) {
+  // Sempre permitir a rota de login e APIs de auth/admin
+  if (
+    pathname === LOGIN_PATH ||
+    pathname.startsWith('/api/login') ||
+    pathname.startsWith('/api/logout') ||
+    pathname.startsWith('/api/admin/')
+  ) {
     return NextResponse.next()
   }
 
@@ -24,21 +22,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  const secret = process.env.DASHBOARD_ACCESS_PASSWORD
-
-  // Se não configurou senha, libera acesso (útil em desenvolvimento local)
-  if (!secret) {
-    return NextResponse.next()
+  const cookieName = getSessionCookieName()
+  const token = request.cookies.get(cookieName)?.value
+  if (token) {
+    const session = await verifySession(token)
+    if (session) return NextResponse.next()
   }
 
-  const cookieValue = request.cookies.get(COOKIE_NAME)?.value
-  const expectedHash = await hashPassword(secret)
-
-  if (cookieValue === expectedHash) {
-    return NextResponse.next()
-  }
-
-  // Redirecionar para login
+  // Sem sessão válida -> login
   const loginUrl = new URL(LOGIN_PATH, request.url)
   loginUrl.searchParams.set('from', pathname)
   return NextResponse.redirect(loginUrl)

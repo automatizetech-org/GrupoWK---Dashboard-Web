@@ -523,7 +523,7 @@ export default function XmlCharts({ data, dateRange }: XmlChartsProps) {
               animationBegin={0}
               animationDuration={800}
               isAnimationActive={true}
-              activeIndex={activePieIndex}
+              activeIndex={activePieIndex ?? undefined}
               activeShape={(props: any) => {
                 const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props
                 // Extrai a cor do fill (pode ser uma URL de gradiente ou cor sólida)

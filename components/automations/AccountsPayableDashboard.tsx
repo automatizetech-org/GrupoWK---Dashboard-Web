@@ -644,9 +644,18 @@ export default function AccountsPayableDashboard({ automation, department, onBac
           })
           
           // Calculate totals from titles if totals not available
-          const calculatedTotal = titles.reduce((sum, t) => sum + t.totalValue, 0)
-          const calculatedPaid = titles.reduce((sum, t) => sum + t.paidValue, 0)
-          const calculatedPending = titles.reduce((sum, t) => sum + t.pendingValue, 0)
+          const calculatedTotal = titles.reduce(
+            (sum: number, t: { totalValue?: number }) => sum + (t.totalValue || 0),
+            0
+          )
+          const calculatedPaid = titles.reduce(
+            (sum: number, t: { paidValue?: number }) => sum + (t.paidValue || 0),
+            0
+          )
+          const calculatedPending = titles.reduce(
+            (sum: number, t: { pendingValue?: number }) => sum + (t.pendingValue || 0),
+            0
+          )
           
           clients.push({
             clientCode: client.client_code || '',
