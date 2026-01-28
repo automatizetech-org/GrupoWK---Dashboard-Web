@@ -6,13 +6,6 @@ const COOKIE_MAX_AGE = 60 * 60 * 24 * 7 // 7 dias
 
 export async function POST(request: NextRequest) {
   try {
-    if (!process.env.SESSION_SECRET) {
-      return NextResponse.json(
-        { success: false, error: 'SESSION_SECRET não configurado no ambiente (Vercel).', code: 'MISSING_SESSION_SECRET' },
-        { status: 500 }
-      )
-    }
-
     const body = await request.json()
     const { username, password } = body ?? {}
 
