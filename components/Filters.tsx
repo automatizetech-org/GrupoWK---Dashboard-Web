@@ -240,8 +240,8 @@ export default function Filters({
           </div>
 
           {/* Seletores de data manual */}
-          <div className="grid grid-cols-2 gap-2 md:gap-3 relative z-10">
-            <div>
+          <div className="flex gap-2 md:gap-3 relative z-10 min-w-0">
+            <div className="flex-1 min-w-0">
               <label htmlFor="date-start" className="block text-xs text-neutral-text-secondary dark:text-slate-400 mb-1 transition-colors duration-500">
                 Data Inicial
               </label>
@@ -262,7 +262,7 @@ export default function Filters({
                 className="w-full px-3 md:px-4 py-2.5 md:py-3 text-sm border-2 border-neutral-border/50 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200 rounded-lg md:rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue/50 backdrop-3d transition-all duration-200 hover:border-primary-blue/30 shadow-sm hover:shadow-md touch-manipulation"
               />
             </div>
-            <div>
+            <div className="flex-1 min-w-0">
               <label htmlFor="date-end" className="block text-xs text-neutral-text-secondary dark:text-slate-400 mb-1 transition-colors duration-500">
                 Data Final
               </label>
