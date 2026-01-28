@@ -240,7 +240,7 @@ export default function Filters({
           </div>
 
           {/* Seletores de data manual */}
-          <div className="grid grid-cols-2 gap-2 md:gap-3 relative z-10 min-w-0">
+          <div className="grid grid-cols-2 gap-3 md:gap-3 relative z-10 min-w-0">
             <div className="min-w-0">
               <label htmlFor="date-start" className="block text-xs text-neutral-text-secondary dark:text-slate-400 mb-1 transition-colors duration-500">
                 Data Inicial
