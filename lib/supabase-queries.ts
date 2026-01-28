@@ -46,7 +46,8 @@ export async function getTaxData(
           name
         )
       `)
-      .eq('automation_id', 'xml-sefaz') // Filtra apenas dados do Sefaz XML
+      // IMPORTANTE: ID da automação no Supabase é "xml-siefiaz" (ver schema.sql)
+      .eq('automation_id', 'xml-siefiaz')
       .in('company_id', companyIds)
       .order('updated_at', { ascending: false })
 
