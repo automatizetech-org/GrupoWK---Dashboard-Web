@@ -61,13 +61,13 @@ export default function DashboardLayout() {
   }, [])
 
   return (
-    <div className="flex h-screen bg-neutral-background dark:bg-slate-900 transition-colors duration-500">
+    <div className="flex min-h-[100dvh] bg-neutral-background dark:bg-slate-900 transition-colors duration-500">
       <Sidebar
         departments={departments}
         selectedDepartment={selectedDepartment}
         onSelectDepartment={setSelectedDepartment}
       />
-      <main className="flex-1 overflow-y-auto relative pt-16 md:pt-0">
+      <main className="flex-1 min-w-0 overflow-y-auto relative pt-16 md:pt-0">
         {/* Dark Mode Toggle e Sair - Canto superior direito */}
         <div className="fixed top-4 right-4 md:top-6 md:right-6 z-50 flex items-center gap-2 md:gap-3">
           <DarkModeToggle />

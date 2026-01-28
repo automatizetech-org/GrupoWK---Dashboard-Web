@@ -39,7 +39,7 @@ export default function AdminUsersClient({ adminUsername }: { adminUsername: str
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden p-4">
+    <div className="min-h-[100dvh] flex items-center justify-center relative overflow-hidden p-4">
       <div className="absolute inset-0 bg-gradient-to-br from-red-50 via-white to-blue-50 dark:from-neutral-950 dark:via-slate-950 dark:to-slate-900" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_35%,rgba(220,38,38,0.10),transparent_55%),radial-gradient(circle_at_85%_70%,rgba(37,99,235,0.12),transparent_55%)]" />
 
