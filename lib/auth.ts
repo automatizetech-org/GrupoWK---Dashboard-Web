@@ -44,8 +44,19 @@ export function getSessionCookieName() {
   return COOKIE_NAME
 }
 
-export async function signSession(payload: Omit<SessionPayload, 'exp'>, maxAgeSeconds: number) {
+function getSessionSecret(): string | null {
   const secret = process.env.SESSION_SECRET
+  if (secret) return secret
+
+  // Em desenvolvimento local, permite rodar sem configurar SESSION_SECRET.
+  // (Em produção, SEMPRE configure.)
+  if (process.env.NODE_ENV !== 'production') return 'dev-session-secret'
+
+  return null
+}
+
+export async function signSession(payload: Omit<SessionPayload, 'exp'>, maxAgeSeconds: number) {
+  const secret = getSessionSecret()
   if (!secret) throw new Error('SESSION_SECRET não configurado')
 
   const exp = Math.floor(Date.now() / 1000) + maxAgeSeconds
@@ -56,7 +67,7 @@ export async function signSession(payload: Omit<SessionPayload, 'exp'>, maxAgeSe
 }
 
 export async function verifySession(token: string): Promise<SessionPayload | null> {
-  const secret = process.env.SESSION_SECRET
+  const secret = getSessionSecret()
   if (!secret) return null
 
   const [body, sig] = token.split('.')
