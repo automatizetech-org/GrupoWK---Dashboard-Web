@@ -18,21 +18,33 @@ export async function getTaxData(
   endDate: string
 ): Promise<TaxData[]> {
   if (!isSupabaseConfigured || !supabase) {
-    console.warn('Supabase não configurado. Retornando array vazio.')
+    console.warn('⚠️ Supabase não configurado. Retornando array vazio.')
     return []
   }
 
   try {
     // Valida as datas antes de fazer a query
     if (!startDate || !endDate) {
-      console.error('Datas inválidas para busca:', { startDate, endDate })
+      console.error('❌ Datas inválidas para busca:', { startDate, endDate })
       return []
     }
     
     if (startDate > endDate) {
-      console.error('Data inicial maior que data final:', { startDate, endDate })
+      console.error('❌ Data inicial maior que data final:', { startDate, endDate })
       return []
     }
+
+    if (!companyIds || companyIds.length === 0) {
+      console.warn('⚠️ Nenhuma empresa selecionada. Retornando array vazio.')
+      return []
+    }
+    
+    console.log('🔍 Buscando dados fiscais:', {
+      companyIds: companyIds.length,
+      startDate,
+      endDate,
+      automationId: 'xml-sefaz'
+    })
     
     // IMPORTANT:
     // Agora o Supabase pode ter (a) registros antigos diários e (b) um registro consolidado por empresa.
@@ -52,9 +64,32 @@ export async function getTaxData(
       .order('updated_at', { ascending: false })
 
     if (error) {
-      console.error('Erro ao buscar dados fiscais:', error)
+      console.error('❌ Erro ao buscar dados fiscais:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
+      })
+      
+      // Se a tabela não existe, retornar array vazio sem quebrar
+      if (error.code === 'PGRST116' || error.code === '42P01' || error.message?.includes('does not exist')) {
+        console.warn('⚠️ Tabela automation_data não encontrada. Execute o script fix_xml_automation_data.sql no Supabase.')
+        return []
+      }
+      
       return []
     }
+
+    console.log('✅ Dados brutos recebidos do Supabase:', {
+      totalRows: data?.length || 0,
+      sampleRow: data?.[0] ? {
+        id: data[0].id,
+        company_id: data[0].company_id,
+        automation_id: data[0].automation_id,
+        hasMetadata: !!data[0].metadata,
+        companyName: data[0].companies?.name
+      } : null
+    })
 
     // Dedup: 1 registro por empresa (o mais recente).
     const latestByCompany: Record<string, any> = {}
@@ -156,9 +191,34 @@ export async function getTaxData(
       }
     }
     
+    console.log('✅ Dados processados:', {
+      totalExpanded: expandedData.length,
+      companiesProcessed: rows.length,
+      sampleExpanded: expandedData[0] ? {
+        companyName: expandedData[0].companyName,
+        date: expandedData[0].date,
+        xmlCount: expandedData[0].xmlCount
+      } : null
+    })
+    
+    if (expandedData.length === 0 && rows.length > 0) {
+      console.warn('⚠️ Dados encontrados mas nenhum expandido. Verifique se metadata contém evolucao_diaria ou periodo_agregado.')
+      console.log('📋 Estrutura do primeiro registro:', {
+        id: rows[0].id,
+        company_id: rows[0].company_id,
+        automation_id: rows[0].automation_id,
+        metadataKeys: Object.keys(rows[0].metadata || {}),
+        hasEvolucaoDiaria: !!(rows[0].metadata?.evolucao_diaria),
+        hasPeriodoAgregado: !!(rows[0].metadata?.periodo_agregado)
+      })
+    }
+    
     return expandedData
-  } catch (error) {
-    console.error('Erro ao buscar dados fiscais:', error)
+  } catch (error: any) {
+    console.error('❌ Erro ao buscar dados fiscais:', {
+      message: error?.message,
+      stack: error?.stack
+    })
     return []
   }
 }
@@ -270,19 +330,39 @@ export async function getPayrollData(
  */
 export async function getCompanies(): Promise<Company[]> {
   if (!isSupabaseConfigured || !supabase) {
-    console.warn('Supabase não configurado. Retornando array vazio.')
+    console.warn('⚠️ Supabase não configurado. Retornando array vazio.')
     return []
   }
 
   try {
+    console.log('🔍 Buscando empresas do Supabase...')
+    
     const { data, error } = await supabase
       .from('companies')
       .select('id, name, cnpj')
       .order('name', { ascending: true })
 
     if (error) {
-      console.error('Erro ao buscar empresas:', error)
+      console.error('❌ Erro ao buscar empresas:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
+      })
+      
+      // Se a tabela não existe ou RLS bloqueia, retornar array vazio sem quebrar
+      if (error.code === 'PGRST116' || error.code === '42P01' || error.message?.includes('does not exist')) {
+        console.warn('⚠️ Tabela companies não encontrada ou RLS bloqueando acesso.')
+        return []
+      }
+      
       return []
+    }
+
+    console.log('✅ Empresas encontradas:', data?.length || 0, 'empresas')
+    
+    if (data && data.length > 0) {
+      console.log('📋 Primeiras empresas:', data.slice(0, 3).map(c => ({ id: c.id, name: c.name })))
     }
 
     return (data || []).map((item: any) => ({
@@ -290,8 +370,11 @@ export async function getCompanies(): Promise<Company[]> {
       name: item.name,
       cnpj: item.cnpj,
     }))
-  } catch (error) {
-    console.error('Erro ao buscar empresas:', error)
+  } catch (error: any) {
+    console.error('❌ Erro ao buscar empresas:', {
+      message: error?.message,
+      stack: error?.stack
+    })
     return []
   }
 }
