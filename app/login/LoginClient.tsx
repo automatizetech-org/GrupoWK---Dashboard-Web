@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { Lock, Loader2, AlertCircle, Shield } from 'lucide-react'
@@ -9,6 +9,12 @@ export default function LoginClient() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const from = searchParams.get('from') || '/'
+  const isAdminTarget = from === '/admin'
+
+  // Prefetch para não "travar" no primeiro clique (dev/produção)
+  useEffect(() => {
+    router.prefetch('/admin')
+  }, [router])
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -122,11 +128,18 @@ export default function LoginClient() {
         <div className="mt-6 flex items-center justify-center">
           <button
             type="button"
-            onClick={() => router.push('/admin')}
-            className="text-sm text-neutral-700 dark:text-neutral-300 hover:text-primary-blue font-semibold inline-flex items-center gap-2 transition-colors"
+            onMouseEnter={() => router.prefetch('/admin')}
+            onClick={() => {
+              // Não navega para /admin (evita compilação pesada/redirect em dev).
+              // Apenas define o destino pós-login como /admin.
+              router.replace(isAdminTarget ? '/login' : '/login?from=/admin')
+            }}
+            className="group inline-flex items-center gap-2 rounded-full border border-neutral-200/80 dark:border-neutral-700/70 bg-white/70 dark:bg-neutral-800/40 px-4 py-2 text-sm font-semibold text-neutral-800 dark:text-neutral-200 shadow-sm hover:shadow-md transition-all hover:border-primary-blue/40 hover:text-primary-blue"
           >
-            <Shield size={16} />
-            Admin
+            <span className="flex items-center justify-center h-6 w-6 rounded-full bg-gradient-to-br from-red-600 to-primary-blue text-white shadow-sm group-hover:shadow">
+              <Shield size={14} />
+            </span>
+            {isAdminTarget ? 'Admin (ativado)' : 'Admin'}
           </button>
         </div>
 
