@@ -1085,3 +1085,39 @@ a {
 .delay-2000 {
   animation-delay: 2s;
 }
+
+/* Mobile optimizations */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent text selection on mobile buttons */
+button, a {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Better scrolling on mobile */
+@media (max-width: 768px) {
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Reduce animations on mobile for better performance */
+  .card-3d:hover {
+    transform: translateY(-4px);
+  }
+  
+  /* Smaller shadows on mobile */
+  .shadow-3d {
+    box-shadow: 
+      0 10px 30px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Prevent horizontal scroll */
+  body {
+    overflow-x: hidden;
+  }
+}

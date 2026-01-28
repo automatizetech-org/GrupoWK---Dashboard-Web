@@ -14,15 +14,15 @@ export default function DepartmentView({ department }: { department: Department 
   }, [department.id])
 
   return (
-    <div className="p-6 slide-in-up">
-      <div className="mb-8">
-        <div className="flex items-center gap-4 mb-3">
-          <div className="w-2 h-12 bg-gradient-to-b from-primary-blue via-secondary-purple to-primary-blue rounded-full shadow-lg"></div>
+    <div className="p-4 md:p-6 slide-in-up">
+      <div className="mb-6 md:mb-8">
+        <div className="flex items-center gap-3 md:gap-4 mb-3">
+          <div className="w-1.5 md:w-2 h-8 md:h-12 bg-gradient-to-b from-primary-blue via-secondary-purple to-primary-blue rounded-full shadow-lg flex-shrink-0"></div>
           <div>
-            <h1 className="text-4xl font-bold text-neutral-text-primary dark:text-slate-100 mb-2 drop-shadow-sm transition-colors duration-500">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-neutral-text-primary dark:text-slate-100 mb-1 md:mb-2 drop-shadow-sm transition-colors duration-500">
               {department.name}
             </h1>
-            <p className="text-lg text-neutral-text-secondary dark:text-slate-300 transition-colors duration-500">{department.description}</p>
+            <p className="text-sm md:text-base lg:text-lg text-neutral-text-secondary dark:text-slate-300 transition-colors duration-500">{department.description}</p>
           </div>
         </div>
       </div>

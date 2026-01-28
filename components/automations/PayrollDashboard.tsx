@@ -44,25 +44,25 @@ export default function PayrollDashboard({ automation, department, onBack }: Pay
     <div>
       <button
         onClick={onBack}
-        className="flex items-center gap-3 text-neutral-text-secondary hover:text-primary-blue mb-6 transition-all duration-300 group card-3d inline-block px-4 py-2 rounded-xl hover:bg-white/50 backdrop-3d"
+        className="flex items-center gap-2 md:gap-3 text-neutral-text-secondary hover:text-primary-blue mb-4 md:mb-6 transition-all duration-300 group card-3d inline-block px-3 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl hover:bg-white/50 backdrop-3d touch-manipulation active:scale-95"
       >
-        <div className="p-2 bg-gradient-to-br from-status-success/10 to-primary-blue/10 rounded-lg group-hover:from-status-success/20 group-hover:to-primary-blue/20 transition-all">
-          <ArrowLeft size={18} className="group-hover:-translate-x-2 transition-transform duration-300" />
+        <div className="p-1.5 md:p-2 bg-gradient-to-br from-status-success/10 to-primary-blue/10 rounded-lg group-hover:from-status-success/20 group-hover:to-primary-blue/20 transition-all">
+          <ArrowLeft size={16} className="md:w-[18px] md:h-[18px] group-hover:-translate-x-2 transition-transform duration-300" />
         </div>
-        <span className="font-semibold">Voltar para automações</span>
+        <span className="font-semibold text-sm md:text-base">Voltar para automações</span>
       </button>
 
-      <div className="mb-8 slide-in-up">
-        <div className="flex items-center gap-4 mb-4">
-          <div className="p-4 bg-gradient-to-br from-status-success via-green-500 to-green-600 rounded-2xl shadow-3d neon-glow-hover relative overflow-hidden">
+      <div className="mb-6 md:mb-8 slide-in-up">
+        <div className="flex items-center gap-3 md:gap-4 mb-4">
+          <div className="p-3 md:p-4 bg-gradient-to-br from-status-success via-green-500 to-green-600 rounded-xl md:rounded-2xl shadow-3d neon-glow-hover relative overflow-hidden flex-shrink-0">
             <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
-            <Users className="text-white relative z-10" size={32} />
+            <Users className="text-white relative z-10" size={24} style={{ width: '24px', height: '24px' }} />
           </div>
-          <div>
-            <h2 className="text-4xl font-bold text-neutral-text-primary drop-shadow-sm">
+          <div className="min-w-0 flex-1">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-neutral-text-primary drop-shadow-sm break-words">
               {automation.name}
             </h2>
-            <p className="text-neutral-text-secondary mt-2 text-lg">{automation.description}</p>
+            <p className="text-neutral-text-secondary mt-1 md:mt-2 text-sm md:text-base lg:text-lg break-words">{automation.description}</p>
           </div>
         </div>
       </div>
@@ -75,7 +75,7 @@ export default function PayrollDashboard({ automation, department, onBack }: Pay
         onDateRangeChange={setDateRange}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 mb-6 md:mb-8">
         <StatCard
           title="Funcionários"
           value={totals.employeeCount.toLocaleString()}
@@ -129,14 +129,14 @@ function StatCard({
   gradient: string
 }) {
   return (
-    <div className="bg-gradient-to-br from-neutral-surface to-neutral-background border border-neutral-border rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 group">
-      <div className="flex items-start justify-between mb-4">
-        <div className={`p-3 bg-gradient-to-br ${gradient} rounded-lg shadow-md group-hover:scale-110 transition-transform`}>
-          <Icon className="text-white" size={24} />
+    <div className="bg-gradient-to-br from-neutral-surface to-neutral-background border border-neutral-border rounded-lg md:rounded-xl p-4 md:p-6 shadow-sm hover:shadow-lg transition-all duration-300 group">
+      <div className="flex items-start justify-between mb-3 md:mb-4">
+        <div className={`p-2.5 md:p-3 bg-gradient-to-br ${gradient} rounded-lg shadow-md group-hover:scale-110 transition-transform`}>
+          <Icon className="text-white" size={20} style={{ width: '20px', height: '20px' }} />
         </div>
       </div>
-      <h3 className="text-sm font-medium text-neutral-text-secondary mb-2">{title}</h3>
-      <p className="text-2xl font-bold text-neutral-text-primary">{value}</p>
+      <h3 className="text-xs md:text-sm font-medium text-neutral-text-secondary mb-2 break-words">{title}</h3>
+      <p className="text-xl md:text-2xl font-bold text-neutral-text-primary break-words">{value}</p>
     </div>
   )
 }

@@ -4,6 +4,11 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'WK Analytics - Grupo WK',
   description: 'Sistema de análise e gestão de dados do Grupo WK - Garantia de Qualidade em Dados',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+  },
 }
 
 export default function RootLayout({

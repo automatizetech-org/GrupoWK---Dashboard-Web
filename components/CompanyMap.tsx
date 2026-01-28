@@ -407,10 +407,10 @@ export default function CompanyMap({ selectedCompanyIds = [], dateRange }: Compa
     return (
       <>
         <LeafletLoader />
-        <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-2xl p-8 shadow-3d relative overflow-hidden">
-          <div className="h-[600px] flex items-center justify-center">
-            <div className="text-center">
-              <p className="text-neutral-text-secondary">Erro ao carregar mapa. Tente novamente.</p>
+        <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-xl md:rounded-2xl p-4 md:p-8 shadow-3d relative overflow-hidden">
+          <div className="h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center">
+            <div className="text-center px-4">
+              <p className="text-sm md:text-base text-neutral-text-secondary">Erro ao carregar mapa. Tente novamente.</p>
             </div>
           </div>
         </div>
@@ -422,9 +422,9 @@ export default function CompanyMap({ selectedCompanyIds = [], dateRange }: Compa
     return (
       <>
         <LeafletLoader />
-        <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-2xl p-8 shadow-3d relative overflow-hidden">
-          <div className="h-[600px] flex items-center justify-center">
-            <div className="text-neutral-text-secondary">Carregando mapa...</div>
+        <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-xl md:rounded-2xl p-4 md:p-8 shadow-3d relative overflow-hidden">
+          <div className="h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center">
+            <div className="text-sm md:text-base text-neutral-text-secondary">Carregando mapa...</div>
           </div>
         </div>
       </>
@@ -433,11 +433,11 @@ export default function CompanyMap({ selectedCompanyIds = [], dateRange }: Compa
 
   if (companyLocations.length === 0) {
     return (
-      <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-2xl p-8 shadow-3d relative overflow-hidden">
-        <div className="h-[600px] flex items-center justify-center">
-          <div className="text-center">
-            <MapPin className="mx-auto text-neutral-text-secondary mb-2" size={48} />
-            <p className="text-neutral-text-secondary">Selecione empresas nos filtros para visualizar no mapa</p>
+      <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-xl md:rounded-2xl p-4 md:p-8 shadow-3d relative overflow-hidden">
+        <div className="h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center">
+          <div className="text-center px-4">
+            <MapPin className="mx-auto text-neutral-text-secondary mb-2 w-9 h-9 md:w-12 md:h-12" />
+            <p className="text-sm md:text-base text-neutral-text-secondary break-words">Selecione empresas nos filtros para visualizar no mapa</p>
           </div>
         </div>
       </div>
@@ -449,17 +449,17 @@ export default function CompanyMap({ selectedCompanyIds = [], dateRange }: Compa
   return (
     <>
       <LeafletLoader />
-      <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-2xl p-8 shadow-3d relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5 pointer-events-none rounded-2xl" aria-hidden="true"></div>
+      <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-xl md:rounded-2xl p-4 md:p-8 shadow-3d relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5 pointer-events-none rounded-xl md:rounded-2xl" aria-hidden="true"></div>
       <div className="relative z-10">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-bold text-neutral-text-primary flex items-center gap-2">
-            <div className="w-1 h-6 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full shadow-lg"></div>
-            Localização das Empresas Processadas
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4 md:mb-6">
+          <h3 className="text-lg md:text-xl font-bold text-neutral-text-primary flex items-center gap-2">
+            <div className="w-1 h-5 md:h-6 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full shadow-lg flex-shrink-0"></div>
+            <span className="break-words">Localização das Empresas Processadas</span>
           </h3>
           {companyLocations.length > 0 && (
-            <div className="text-sm text-neutral-text-secondary">
+            <div className="text-xs md:text-sm text-neutral-text-secondary">
               {companyLocations.length} {companyLocations.length === 1 ? 'empresa' : 'empresas'} no mapa
             </div>
           )}
@@ -467,14 +467,15 @@ export default function CompanyMap({ selectedCompanyIds = [], dateRange }: Compa
         
         {/* Map Container – contido no bloco; 3D reforçado só no Personalizado */}
         <div
-          className={`rounded-xl overflow-hidden border-2 border-primary-blue/20 relative w-full min-w-0 ${selectedLayer === 'custom' ? 'map-personalizado-3d' : 'shadow-2xl'}`}
-          style={{ height: '600px', maxWidth: '100%' }}
+          className={`rounded-lg md:rounded-xl overflow-hidden border-2 border-primary-blue/20 relative w-full min-w-0 ${selectedLayer === 'custom' ? 'map-personalizado-3d' : 'shadow-2xl'}`}
+          style={{ height: '400px', maxWidth: '100%' }}
+          className="md:h-[500px] lg:h-[600px]"
         >
           {/* Layer Selector - Compact */}
-          <div className="absolute top-4 right-4 z-[1000] bg-gradient-to-br from-white/95 via-white/90 to-white/95 backdrop-blur-xl rounded-xl p-2 shadow-lg border border-primary-blue/20 card-3d">
+          <div className="absolute top-2 right-2 md:top-4 md:right-4 z-[1000] bg-gradient-to-br from-white/95 via-white/90 to-white/95 backdrop-blur-xl rounded-lg md:rounded-xl p-1.5 md:p-2 shadow-lg border border-primary-blue/20 card-3d">
             <div className="flex flex-col gap-1">
-              <div className="text-[10px] font-bold text-neutral-text-primary mb-1 px-1.5 uppercase tracking-wider">
-                Camadas do Mapa
+              <div className="text-[9px] md:text-[10px] font-bold text-neutral-text-primary mb-0.5 md:mb-1 px-1 md:px-1.5 uppercase tracking-wider">
+                Camadas
               </div>
               {Object.entries(mapLayers).map(([key, layer]) => {
                 const Icon = layer.icon
@@ -484,7 +485,7 @@ export default function CompanyMap({ selectedCompanyIds = [], dateRange }: Compa
                     key={key}
                     onClick={() => setSelectedLayer(key as keyof typeof mapLayers)}
                     className={`
-                      flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all duration-300
+                      flex items-center gap-1.5 md:gap-2 px-2 md:px-2.5 py-1 md:py-1.5 rounded-md md:rounded-lg transition-all duration-300 touch-manipulation active:scale-95
                       ${isActive 
                         ? 'bg-gradient-to-br from-primary-blue via-primary-blue to-secondary-purple text-white shadow-md transform scale-[1.02]' 
                         : 'bg-neutral-background text-neutral-text-primary hover:bg-white/90 hover:shadow-sm hover:scale-[1.01]'
@@ -493,17 +494,17 @@ export default function CompanyMap({ selectedCompanyIds = [], dateRange }: Compa
                     `}
                   >
                     <div className={`
-                      p-1 rounded-md transition-all duration-300
+                      p-0.5 md:p-1 rounded-md transition-all duration-300 flex-shrink-0
                       ${isActive 
                         ? 'bg-white/20' 
                         : 'bg-primary-blue/10'
                       }
                     `}>
-                      <Icon size={14} className={isActive ? 'text-white' : 'text-primary-blue'} />
+                      <Icon size={12} className="md:w-[14px] md:h-[14px]" style={{ width: '12px', height: '12px' }} />
                     </div>
-                    <span className="text-xs font-semibold flex-1 text-left">{layer.name}</span>
+                    <span className="text-[10px] md:text-xs font-semibold flex-1 text-left break-words">{layer.name}</span>
                     {isActive && (
-                      <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse shadow"></div>
+                      <div className="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full animate-pulse shadow flex-shrink-0"></div>
                     )}
                   </button>
                 )
@@ -522,7 +523,7 @@ export default function CompanyMap({ selectedCompanyIds = [], dateRange }: Compa
               style={{ height: '100%', width: '100%', zIndex: 1 }}
               scrollWheelZoom={true}
               boxZoom={false}
-              className={`rounded-xl ${selectedLayer === 'custom' ? 'custom-map-dark' : ''}`}
+              className={`rounded-lg md:rounded-xl ${selectedLayer === 'custom' ? 'custom-map-dark' : ''}`}
             >
             <TileLayer
               key={`${selectedLayer}-base`}

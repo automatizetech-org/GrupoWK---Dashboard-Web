@@ -25,7 +25,7 @@ function LogoutButton() {
       type="button"
       onClick={handleLogout}
       disabled={loading}
-      className="text-sm text-neutral-500 hover:text-primary-blue dark:text-neutral-400 dark:hover:text-primary-blue transition-colors px-3 py-1.5 rounded-lg hover:bg-primary-blue/10 disabled:opacity-50"
+      className="text-xs md:text-sm text-neutral-500 hover:text-primary-blue dark:text-neutral-400 dark:hover:text-primary-blue transition-colors px-2 md:px-3 py-1.5 md:py-1.5 rounded-lg hover:bg-primary-blue/10 disabled:opacity-50 touch-manipulation active:scale-95"
     >
       Sair
     </button>
@@ -67,9 +67,9 @@ export default function DashboardLayout() {
         selectedDepartment={selectedDepartment}
         onSelectDepartment={setSelectedDepartment}
       />
-      <main className="flex-1 overflow-y-auto relative">
+      <main className="flex-1 overflow-y-auto relative pt-16 md:pt-0">
         {/* Dark Mode Toggle e Sair - Canto superior direito */}
-        <div className="fixed top-6 right-6 z-50 flex items-center gap-3">
+        <div className="fixed top-4 right-4 md:top-6 md:right-6 z-50 flex items-center gap-2 md:gap-3">
           <DarkModeToggle />
           <LogoutButton />
         </div>
@@ -100,16 +100,16 @@ export default function DashboardLayout() {
             </div>
 
             {/* Main content */}
-            <div className="relative z-10 transform-3d max-w-4xl mx-auto px-6">
+            <div className="relative z-10 transform-3d max-w-4xl mx-auto px-4 md:px-6">
               <div className="flex flex-col items-center">
                 {/* Logo Section */}
-                <div className="mb-10 relative inline-flex items-center justify-center logo-container">
+                <div className="mb-6 md:mb-10 relative inline-flex items-center justify-center logo-container">
                   <div className="absolute inset-0 bg-gradient-to-r from-primary-blue via-amber-500/40 to-primary-blue rounded-full blur-3xl opacity-30 animate-pulse-glow"></div>
                   <div className="relative logo-wrapper">
                     <img 
                       src={`/images/logo.png?t=${imageVersion}`}
                       alt="GRUPO WK Logo" 
-                      className="h-52 w-auto object-contain drop-shadow-2xl logo-image"
+                      className="h-32 md:h-52 w-auto object-contain drop-shadow-2xl logo-image"
                       key={`logo-${imageVersion}`}
                     />
                     {/* Glow rings - WK inspired */}
@@ -120,14 +120,14 @@ export default function DashboardLayout() {
                 </div>
 
                 {/* Quote Section - Beautiful and well-worked */}
-                <div className="mb-8 w-full max-w-2xl quote-container">
+                <div className="mb-6 md:mb-8 w-full max-w-2xl quote-container">
                   <div className="relative quote-wrapper">
                     {/* Decorative quote marks */}
-                    <div className="absolute -left-8 -top-4 text-6xl font-serif text-primary-blue/20 select-none quote-mark-left">"</div>
-                    <div className="absolute -right-8 -bottom-4 text-6xl font-serif text-amber-500/20 select-none quote-mark-right">"</div>
+                    <div className="absolute -left-4 md:-left-8 -top-2 md:-top-4 text-4xl md:text-6xl font-serif text-primary-blue/20 select-none quote-mark-left">"</div>
+                    <div className="absolute -right-4 md:-right-8 -bottom-2 md:-bottom-4 text-4xl md:text-6xl font-serif text-amber-500/20 select-none quote-mark-right">"</div>
                     
                     {/* Quote text with gradient */}
-                    <p className="quote-text text-2xl md:text-3xl font-bold leading-relaxed text-center px-8 py-6 relative z-10 dark:text-slate-200 transition-colors duration-500">
+                    <p className="quote-text text-lg md:text-2xl lg:text-3xl font-bold leading-relaxed text-center px-4 md:px-8 py-4 md:py-6 relative z-10 dark:text-slate-200 transition-colors duration-500">
                       <span className="quote-gradient dark:from-blue-300 dark:via-amber-300 dark:to-blue-300">Confia no Senhor de todo o seu coração!</span>
                     </p>
                     
@@ -140,29 +140,29 @@ export default function DashboardLayout() {
                 </div>
 
                 {/* Title Section */}
-                <div className="text-center mb-6">
-                  <h1 className="text-6xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-primary-blue via-amber-500 to-primary-blue dark:from-blue-400 dark:via-amber-400 dark:to-blue-400 bg-clip-text text-transparent animate-gradient-shift drop-shadow-lg transition-all duration-500">
+                <div className="text-center mb-4 md:mb-6">
+                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-2 md:mb-4 bg-gradient-to-r from-primary-blue via-amber-500 to-primary-blue dark:from-blue-400 dark:via-amber-400 dark:to-blue-400 bg-clip-text text-transparent animate-gradient-shift drop-shadow-lg transition-all duration-500">
                     WK Analytics
                   </h1>
                   
                   {/* Subtitle with fade in */}
-                  <p className="text-lg md:text-xl text-neutral-text-secondary dark:text-slate-300 animate-fade-in-up font-medium transition-colors duration-500">
+                  <p className="text-base md:text-lg lg:text-xl text-neutral-text-secondary dark:text-slate-300 animate-fade-in-up font-medium transition-colors duration-500 px-4">
                     Plataforma de Análise e Gestão Empresarial
                   </p>
                 </div>
               </div>
 
               {/* Decorative elements - WK inspired */}
-              <div className="flex justify-center gap-4 mt-12">
-                <div className="w-2.5 h-2.5 bg-primary-blue rounded-full animate-bounce shadow-lg shadow-primary-blue/50" style={{ animationDelay: '0s' }}></div>
-                <div className="w-2.5 h-2.5 bg-amber-500 rounded-full animate-bounce shadow-lg shadow-amber-500/50" style={{ animationDelay: '0.2s' }}></div>
-                <div className="w-2.5 h-2.5 bg-primary-blue rounded-full animate-bounce shadow-lg shadow-primary-blue/50" style={{ animationDelay: '0.4s' }}></div>
+              <div className="flex justify-center gap-3 md:gap-4 mt-8 md:mt-12">
+                <div className="w-2 h-2 md:w-2.5 md:h-2.5 bg-primary-blue rounded-full animate-bounce shadow-lg shadow-primary-blue/50" style={{ animationDelay: '0s' }}></div>
+                <div className="w-2 h-2 md:w-2.5 md:h-2.5 bg-amber-500 rounded-full animate-bounce shadow-lg shadow-amber-500/50" style={{ animationDelay: '0.2s' }}></div>
+                <div className="w-2 h-2 md:w-2.5 md:h-2.5 bg-primary-blue rounded-full animate-bounce shadow-lg shadow-primary-blue/50" style={{ animationDelay: '0.4s' }}></div>
               </div>
               
               {/* Analytics badge */}
-              <div className="mt-8 flex justify-center items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-blue/10 via-amber-500/10 to-primary-blue/10 backdrop-blur-sm rounded-full border border-primary-blue/20 animate-fade-in-up mx-auto w-fit" style={{ animationDelay: '0.3s' }}>
+              <div className="mt-6 md:mt-8 flex justify-center items-center gap-2 px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-primary-blue/10 via-amber-500/10 to-primary-blue/10 backdrop-blur-sm rounded-full border border-primary-blue/20 animate-fade-in-up mx-auto w-fit" style={{ animationDelay: '0.3s' }}>
                 <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></div>
-                <span className="text-sm font-semibold text-neutral-text-primary">Insights em Tempo Real</span>
+                <span className="text-xs md:text-sm font-semibold text-neutral-text-primary">Insights em Tempo Real</span>
               </div>
             </div>
           </div>

@@ -68,21 +68,21 @@ export default function LoginClient() {
         <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
 
-      <div className="relative w-full max-w-md bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-neutral-800/50 p-8 transform transition-all duration-500 animate-in fade-in slide-in-from-bottom-4">
-        <div className="flex items-center justify-center gap-3 mb-8">
-          <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-red-600 to-primary-blue shadow-lg flex items-center justify-center overflow-hidden ring-2 ring-primary-blue/20 animate-in zoom-in duration-500">
-            <Image src="/images/logo.png" alt="WK" width={40} height={40} className="drop-shadow-sm" />
+      <div className="relative w-full max-w-md bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl rounded-2xl md:rounded-3xl shadow-2xl border border-white/20 dark:border-neutral-800/50 p-6 md:p-8 transform transition-all duration-500 animate-in fade-in slide-in-from-bottom-4">
+        <div className="flex items-center justify-center gap-2 md:gap-3 mb-6 md:mb-8">
+          <div className="h-12 w-12 md:h-14 md:w-14 rounded-xl md:rounded-2xl bg-gradient-to-br from-red-600 to-primary-blue shadow-lg flex items-center justify-center overflow-hidden ring-2 ring-primary-blue/20 animate-in zoom-in duration-500 flex-shrink-0">
+            <Image src="/images/logo.png" alt="WK" width={32} height={32} className="md:w-10 md:h-10 drop-shadow-sm" />
           </div>
           <div className="text-left">
-            <div className="text-sm text-neutral-500 dark:text-neutral-400 font-medium">WK • Dashboard Web</div>
-            <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white">
+            <div className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400 font-medium">WK • Dashboard Web</div>
+            <h1 className="text-xl md:text-2xl font-extrabold text-neutral-900 dark:text-white">
               Login
             </h1>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
+          <div className="space-y-2.5 md:space-y-3">
             <input
               id="username"
               type="text"
@@ -91,7 +91,7 @@ export default function LoginClient() {
               placeholder="Usuário"
               autoFocus
               autoComplete="username"
-              className="w-full px-4 py-3.5 rounded-xl border-2 border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800/50 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-blue/50 focus:border-primary-blue transition-all"
+              className="w-full px-4 py-3 md:py-3.5 rounded-lg md:rounded-xl border-2 border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800/50 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-blue/50 focus:border-primary-blue transition-all text-base touch-manipulation"
               disabled={loading}
             />
             <input
@@ -101,38 +101,38 @@ export default function LoginClient() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Senha"
               autoComplete="current-password"
-              className="w-full px-4 py-3.5 rounded-xl border-2 border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800/50 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-blue/50 focus:border-primary-blue transition-all"
+              className="w-full px-4 py-3 md:py-3.5 rounded-lg md:rounded-xl border-2 border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800/50 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-blue/50 focus:border-primary-blue transition-all text-base touch-manipulation"
               disabled={loading}
             />
           </div>
 
           {error && (
-            <div className="flex items-center gap-2 text-sm text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-900/30 rounded-xl px-4 py-3 border border-red-200 dark:border-red-800 animate-in slide-in-from-top-2">
-              <AlertCircle size={18} />
-              {error}
+            <div className="flex items-center gap-2 text-xs md:text-sm text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-900/30 rounded-lg md:rounded-xl px-3 md:px-4 py-2.5 md:py-3 border border-red-200 dark:border-red-800 animate-in slide-in-from-top-2">
+              <AlertCircle size={16} className="md:w-[18px] md:h-[18px] flex-shrink-0" />
+              <span className="break-words">{error}</span>
             </div>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 px-4 bg-gradient-to-r from-primary-blue to-blue-600 hover:from-primary-blue-dark hover:to-blue-700 text-white font-semibold rounded-xl transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-primary-blue/25 hover:shadow-primary-blue/40 transform hover:scale-[1.02] active:scale-[0.98]"
+            className="w-full py-3 md:py-3.5 px-4 bg-gradient-to-r from-primary-blue to-blue-600 hover:from-primary-blue-dark hover:to-blue-700 text-white font-semibold rounded-lg md:rounded-xl transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-primary-blue/25 hover:shadow-primary-blue/40 transform hover:scale-[1.02] active:scale-[0.98] touch-manipulation text-base"
           >
             {loading ? (
               <>
-                <Loader2 size={20} className="animate-spin" />
+                <Loader2 size={18} className="md:w-5 md:h-5 animate-spin" />
                 Entrando...
               </>
             ) : (
               <>
-                <Lock size={18} />
+                <Lock size={16} className="md:w-[18px] md:h-[18px]" />
                 Entrar
               </>
             )}
           </button>
         </form>
 
-        <div className="mt-6 flex items-center justify-center">
+        <div className="mt-5 md:mt-6 flex items-center justify-center">
           <button
             type="button"
             onMouseEnter={() => router.prefetch('/admin')}
@@ -143,12 +143,12 @@ export default function LoginClient() {
               setTargetPath(next)
               router.replace(next === '/admin' ? '/login?from=/admin' : '/login')
             }}
-            className="group inline-flex items-center gap-2 rounded-full border border-neutral-200/80 dark:border-neutral-700/70 bg-white/70 dark:bg-neutral-800/40 px-4 py-2 text-sm font-semibold text-neutral-800 dark:text-neutral-200 shadow-sm hover:shadow-md transition-all hover:border-primary-blue/40 hover:text-primary-blue"
+            className="group inline-flex items-center gap-2 rounded-full border border-neutral-200/80 dark:border-neutral-700/70 bg-white/70 dark:bg-neutral-800/40 px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-semibold text-neutral-800 dark:text-neutral-200 shadow-sm hover:shadow-md transition-all hover:border-primary-blue/40 hover:text-primary-blue touch-manipulation active:scale-95"
           >
-            <span className="flex items-center justify-center h-6 w-6 rounded-full bg-gradient-to-br from-red-600 to-primary-blue text-white shadow-sm group-hover:shadow">
-              <Shield size={14} />
+            <span className="flex items-center justify-center h-5 w-5 md:h-6 md:w-6 rounded-full bg-gradient-to-br from-red-600 to-primary-blue text-white shadow-sm group-hover:shadow flex-shrink-0">
+              <Shield size={12} className="md:w-[14px] md:h-[14px]" />
             </span>
-            {isAdminTarget ? 'Admin (ativado)' : 'Admin'}
+            <span className="break-words">{isAdminTarget ? 'Admin (ativado)' : 'Admin'}</span>
           </button>
         </div>
 

@@ -111,50 +111,50 @@ export default function Filters({
   }
 
   return (
-    <div className="card-3d-elevated rounded-2xl p-6 mb-6 shadow-3d relative overflow-hidden transition-colors duration-500">
+    <div className="card-3d-elevated rounded-xl md:rounded-2xl p-4 md:p-6 mb-4 md:mb-6 shadow-3d relative overflow-hidden transition-colors duration-500">
       <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5 dark:from-primary-blue/10 dark:to-secondary-purple/10 transition-opacity duration-500"></div>
-      <div className="flex items-center gap-3 mb-6 relative z-10">
-        <div className="p-3 bg-gradient-to-br from-primary-blue to-primary-blue-dark rounded-xl shadow-md">
-          <Filter size={20} className="text-white" />
+      <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6 relative z-10">
+        <div className="p-2 md:p-3 bg-gradient-to-br from-primary-blue to-primary-blue-dark rounded-lg md:rounded-xl shadow-md">
+          <Filter size={18} className="md:w-5 md:h-5 text-white" />
         </div>
-        <h3 className="text-xl font-bold text-neutral-text-primary dark:text-slate-100 drop-shadow-sm transition-colors duration-500">Filtros</h3>
+        <h3 className="text-lg md:text-xl font-bold text-neutral-text-primary dark:text-slate-100 drop-shadow-sm transition-colors duration-500">Filtros</h3>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <div>
           <label className="block text-sm font-medium text-neutral-text-primary dark:text-slate-200 mb-2">
             Empresas
           </label>
-          <div className="backdrop-3d border border-neutral-border/50 dark:border-slate-600 rounded-xl p-4 max-h-48 overflow-y-auto shadow-inner relative overflow-hidden bg-white dark:bg-slate-800/95">
+          <div className="backdrop-3d border border-neutral-border/50 dark:border-slate-600 rounded-lg md:rounded-xl p-3 md:p-4 max-h-48 md:max-h-48 overflow-y-auto shadow-inner relative overflow-hidden bg-white dark:bg-slate-800/95">
             <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5 dark:from-primary-blue/10 dark:to-secondary-purple/10"></div>
             
             {/* Barra de pesquisa */}
             <div className="relative z-10 mb-3">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-text-secondary" size={16} />
+                <Search className="absolute left-2 md:left-3 top-1/2 transform -translate-y-1/2 text-neutral-text-secondary" size={16} />
                 <input
                   type="text"
                   placeholder="Pesquisar empresa..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 text-sm border-2 border-neutral-border/50 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue/50 backdrop-3d transition-all duration-200 hover:border-primary-blue/30 dark:placeholder:text-slate-400"
+                  className="w-full pl-9 md:pl-10 pr-3 md:pr-4 py-2.5 md:py-2 text-sm border-2 border-neutral-border/50 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue/50 backdrop-3d transition-all duration-200 hover:border-primary-blue/30 dark:placeholder:text-slate-400 touch-manipulation"
                 />
               </div>
             </div>
             
             <button
               onClick={handleSelectAll}
-              className="text-sm text-primary-blue hover:text-primary-blue-dark font-semibold mb-3 relative z-10 transition-all duration-200 hover:scale-105 inline-block"
+              className="text-xs md:text-sm text-primary-blue hover:text-primary-blue-dark font-semibold mb-3 relative z-10 transition-all duration-200 hover:scale-105 inline-block touch-manipulation active:scale-95"
             >
               {selectedCompanies.length === companies.length ? 'Desmarcar todas' : 'Selecionar todas'}
             </button>
-            <div className="space-y-2 relative z-10">
+            <div className="space-y-1.5 md:space-y-2 relative z-10">
               {filteredCompanies.map((company) => (
                 <label
                   key={company.id}
-                  className="flex items-center gap-3 cursor-pointer hover:bg-white/60 dark:hover:bg-slate-700/40 p-3 rounded-lg transition-all duration-200 group card-3d"
+                  className="flex items-center gap-2 md:gap-3 cursor-pointer hover:bg-white/60 dark:hover:bg-slate-700/40 p-2.5 md:p-3 rounded-lg transition-all duration-200 group card-3d touch-manipulation active:scale-95"
                 >
-                  <div className="relative w-5 h-5">
+                  <div className="relative w-5 h-5 flex-shrink-0">
                     {/* Checkbox customizado como bandeira */}
                     <input
                       type="checkbox"
@@ -190,10 +190,10 @@ export default function Filters({
                       <div className="w-5 h-5 border-2 border-neutral-border rounded-sm"></div>
                     )}
                   </div>
-                  <span className="text-sm font-medium text-neutral-text-primary dark:text-slate-200 group-hover:text-primary-blue dark:group-hover:text-blue-400 transition-colors">
+                  <span className="text-xs md:text-sm font-medium text-neutral-text-primary dark:text-slate-200 group-hover:text-primary-blue dark:group-hover:text-blue-400 transition-colors break-words">
                     {company.name}
                     {company.cnpj && (
-                      <span className="text-neutral-text-secondary dark:text-slate-400 ml-2">({company.cnpj})</span>
+                      <span className="text-neutral-text-secondary dark:text-slate-400 ml-1 md:ml-2 text-xs">({company.cnpj})</span>
                     )}
                   </span>
                 </label>
@@ -213,11 +213,11 @@ export default function Filters({
           </label>
           
           {/* Filtros pré-definidos */}
-          <div className="mb-4 relative z-10">
+          <div className="mb-3 md:mb-4 relative z-10">
             <label className="block text-xs text-neutral-text-secondary dark:text-slate-400 mb-2 transition-colors duration-500">
               Períodos rápidos
             </label>
-            <div className="flex flex-wrap gap-2 relative z-10">
+            <div className="flex flex-wrap gap-1.5 md:gap-2 relative z-10">
               {presetButtons.map((preset, index) => {
                 const isActive =
                   dateRange.start === preset.range.start && dateRange.end === preset.range.end
@@ -226,7 +226,7 @@ export default function Filters({
                     key={index}
                     type="button"
                     onClick={() => handlePresetClick(preset.range)}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 cursor-pointer relative z-20 ${
+                    className={`px-2.5 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-medium rounded-lg transition-all duration-200 cursor-pointer relative z-20 touch-manipulation active:scale-95 ${
                       isActive
                         ? 'bg-gradient-to-r from-primary-blue to-primary-blue-dark text-white shadow-md scale-105'
                         : 'bg-white/60 dark:bg-slate-700/60 text-neutral-text-primary dark:text-slate-200 hover:bg-white/80 dark:hover:bg-slate-700/80 hover:scale-105 border border-neutral-border/50 dark:border-slate-600 hover:border-primary-blue/50'
@@ -240,7 +240,7 @@ export default function Filters({
           </div>
 
           {/* Seletores de data manual */}
-          <div className="grid grid-cols-2 gap-3 relative z-10">
+          <div className="grid grid-cols-2 gap-2 md:gap-3 relative z-10">
             <div>
               <label htmlFor="date-start" className="block text-xs text-neutral-text-secondary dark:text-slate-400 mb-1 transition-colors duration-500">
                 Data Inicial
@@ -259,7 +259,7 @@ export default function Filters({
                   }
                 }}
                 aria-label="Data inicial do período"
-                className="w-full px-4 py-3 border-2 border-neutral-border/50 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue/50 backdrop-3d transition-all duration-200 hover:border-primary-blue/30 shadow-sm hover:shadow-md"
+                className="w-full px-3 md:px-4 py-2.5 md:py-3 text-sm border-2 border-neutral-border/50 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200 rounded-lg md:rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue/50 backdrop-3d transition-all duration-200 hover:border-primary-blue/30 shadow-sm hover:shadow-md touch-manipulation"
               />
             </div>
             <div>
@@ -280,7 +280,7 @@ export default function Filters({
                   }
                 }}
                 aria-label="Data final do período"
-                className="w-full px-4 py-3 border-2 border-neutral-border/50 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue/50 backdrop-3d transition-all duration-200 hover:border-primary-blue/30 shadow-sm hover:shadow-md"
+                className="w-full px-3 md:px-4 py-2.5 md:py-3 text-sm border-2 border-neutral-border/50 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200 rounded-lg md:rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue/50 backdrop-3d transition-all duration-200 hover:border-primary-blue/30 shadow-sm hover:shadow-md touch-manipulation"
               />
             </div>
           </div>

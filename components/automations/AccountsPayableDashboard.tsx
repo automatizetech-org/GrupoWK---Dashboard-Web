@@ -861,35 +861,35 @@ export default function AccountsPayableDashboard({ automation, department, onBac
     <div>
       <button
         onClick={onBack}
-        className="flex items-center gap-3 text-neutral-text-secondary hover:text-primary-blue mb-6 transition-all duration-300 group card-3d inline-block px-4 py-2 rounded-xl hover:bg-white/50 backdrop-3d"
+        className="flex items-center gap-2 md:gap-3 text-neutral-text-secondary hover:text-primary-blue mb-4 md:mb-6 transition-all duration-300 group card-3d inline-block px-3 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl hover:bg-white/50 backdrop-3d touch-manipulation active:scale-95"
       >
-        <div className="p-2 bg-gradient-to-br from-secondary-purple/10 to-primary-blue/10 rounded-lg group-hover:from-secondary-purple/20 group-hover:to-primary-blue/20 transition-all">
-          <ArrowLeft size={18} className="group-hover:-translate-x-2 transition-transform duration-300" />
+        <div className="p-1.5 md:p-2 bg-gradient-to-br from-secondary-purple/10 to-primary-blue/10 rounded-lg group-hover:from-secondary-purple/20 group-hover:to-primary-blue/20 transition-all">
+          <ArrowLeft size={16} className="md:w-[18px] md:h-[18px] group-hover:-translate-x-2 transition-transform duration-300" />
         </div>
-        <span className="font-semibold">Voltar para automações</span>
+        <span className="font-semibold text-sm md:text-base">Voltar para automações</span>
       </button>
 
-      <div className="mb-8 slide-in-up">
-        <div className="flex items-center gap-4 mb-4">
-          <div className="p-4 bg-gradient-to-br from-secondary-purple via-secondary-purple to-secondary-purple-dark rounded-2xl shadow-3d neon-glow-hover relative overflow-hidden">
+      <div className="mb-6 md:mb-8 slide-in-up">
+        <div className="flex items-center gap-3 md:gap-4 mb-4">
+          <div className="p-3 md:p-4 bg-gradient-to-br from-secondary-purple via-secondary-purple to-secondary-purple-dark rounded-xl md:rounded-2xl shadow-3d neon-glow-hover relative overflow-hidden flex-shrink-0">
             <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
-            <DollarSign className="text-white relative z-10" size={32} />
+            <DollarSign className="text-white relative z-10" size={24} style={{ width: '24px', height: '24px' }} />
           </div>
-          <div>
-            <h2 className="text-4xl font-bold text-neutral-text-primary dark:text-slate-100 drop-shadow-sm transition-colors duration-500">
+          <div className="min-w-0 flex-1">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-neutral-text-primary dark:text-slate-100 drop-shadow-sm transition-colors duration-500 break-words">
               {automation.name}
             </h2>
-            <p className="text-neutral-text-secondary dark:text-slate-300 mt-2 text-lg transition-colors duration-500">{automation.description}</p>
+            <p className="text-neutral-text-secondary dark:text-slate-300 mt-1 md:mt-2 text-sm md:text-base lg:text-lg transition-colors duration-500 break-words">{automation.description}</p>
           </div>
         </div>
       </div>
 
       {/* File Upload Section */}
-      <div className="mb-8 bg-gradient-to-br from-neutral-surface to-neutral-background border border-neutral-border rounded-xl p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-semibold text-neutral-text-primary flex items-center gap-2">
-            <Upload size={24} className="text-primary-blue" />
-            Importar Contas a Pagar
+      <div className="mb-6 md:mb-8 bg-gradient-to-br from-neutral-surface to-neutral-background border border-neutral-border rounded-lg md:rounded-xl p-4 md:p-6 shadow-sm">
+        <div className="flex items-center justify-between mb-3 md:mb-4">
+          <h3 className="text-lg md:text-xl font-semibold text-neutral-text-primary flex items-center gap-2">
+            <Upload size={20} className="md:w-6 md:h-6 text-primary-blue flex-shrink-0" />
+            <span className="break-words">Importar Contas a Pagar</span>
           </h3>
           
         </div>
@@ -900,7 +900,7 @@ export default function AccountsPayableDashboard({ automation, department, onBac
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${
+            className={`border-2 border-dashed rounded-lg md:rounded-xl p-4 md:p-6 lg:p-8 text-center transition-all ${
               isDragging
                 ? 'border-primary-blue bg-primary-blue/10 scale-105'
                 : selectedFile
@@ -919,48 +919,48 @@ export default function AccountsPayableDashboard({ automation, department, onBac
             />
             
             {selectedFile ? (
-              <div className="flex flex-col items-center gap-4">
-                <div className="flex items-center gap-3">
-                  <FileText size={32} className="text-primary-blue" />
-                  <div className="text-left">
-                    <p className="text-neutral-text-primary font-semibold">{selectedFile.name}</p>
-                    <p className="text-sm text-neutral-text-secondary">
+              <div className="flex flex-col items-center gap-3 md:gap-4">
+                <div className="flex items-center gap-2 md:gap-3 w-full max-w-md">
+                  <FileText size={24} className="md:w-8 md:h-8 text-primary-blue flex-shrink-0" />
+                  <div className="text-left min-w-0 flex-1">
+                    <p className="text-sm md:text-base text-neutral-text-primary font-semibold break-words">{selectedFile.name}</p>
+                    <p className="text-xs md:text-sm text-neutral-text-secondary">
                       {(selectedFile.size / 1024).toFixed(2)} KB
                     </p>
                   </div>
                   <button
                     onClick={handleRemoveFile}
-                    className="ml-4 p-2 text-neutral-text-secondary hover:text-status-error hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                    className="ml-2 md:ml-4 p-1.5 md:p-2 text-neutral-text-secondary hover:text-status-error hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors touch-manipulation active:scale-95 flex-shrink-0"
                     disabled={isProcessing}
                     aria-label="Remover arquivo"
                     title="Remover arquivo"
                   >
-                    <X size={20} />
+                    <X size={18} className="md:w-5 md:h-5" />
                   </button>
                 </div>
                 <label
                   htmlFor="file-upload-ap"
-                  className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                  className={`inline-flex items-center gap-2 px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold transition-all text-sm md:text-base touch-manipulation active:scale-95 ${
                     isProcessing
                       ? 'bg-neutral-border text-neutral-text-secondary cursor-not-allowed'
                       : 'bg-gradient-to-br from-primary-blue to-primary-blue-dark text-white hover:shadow-lg hover:scale-105 cursor-pointer'
                   }`}
                 >
-                  <Upload size={20} />
+                  <Upload size={18} className="md:w-5 md:h-5" />
                   Trocar arquivo
                 </label>
               </div>
             ) : (
               <label htmlFor="file-upload-ap" className="cursor-pointer">
-                <div className="flex flex-col items-center gap-4">
-                  <div className={`p-4 rounded-full ${isDragging ? 'bg-primary-blue/20' : 'bg-primary-blue/10'}`}>
-                    <Upload size={32} className="text-primary-blue" />
+                <div className="flex flex-col items-center gap-3 md:gap-4">
+                  <div className={`p-3 md:p-4 rounded-full ${isDragging ? 'bg-primary-blue/20' : 'bg-primary-blue/10'}`}>
+                    <Upload size={24} className="md:w-8 md:h-8 text-primary-blue" />
                   </div>
                   <div>
-                    <p className="text-neutral-text-primary font-semibold text-lg mb-1">
+                    <p className="text-base md:text-lg text-neutral-text-primary font-semibold mb-1 break-words">
                       {isDragging ? 'Solte o arquivo aqui' : 'Arraste e solte o arquivo aqui'}
                     </p>
-                    <p className="text-neutral-text-secondary text-sm">
+                    <p className="text-xs md:text-sm text-neutral-text-secondary">
                       ou clique para selecionar
                     </p>
                   </div>
@@ -970,19 +970,19 @@ export default function AccountsPayableDashboard({ automation, department, onBac
           </div>
 
           {parsedClients.length > 0 && (
-            <div className="mt-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg">
-              <p className="text-sm text-neutral-text-secondary mb-2">
+            <div className="mt-3 md:mt-4 p-3 md:p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg">
+              <p className="text-xs md:text-sm text-neutral-text-secondary mb-2">
                 Clientes encontrados: {parsedClients.length}
               </p>
-              <div className="max-h-40 overflow-y-auto space-y-1">
+              <div className="max-h-32 md:max-h-40 overflow-y-auto space-y-1">
                 {parsedClients.slice(0, 10).map((client, index) => (
-                  <div key={index} className="text-sm text-neutral-text-primary">
+                  <div key={index} className="text-xs md:text-sm text-neutral-text-primary break-words">
                     <span className="font-semibold">{client.clientCode}</span> - {client.clientName}
-                    {client.amount && <span className="ml-2 text-neutral-text-secondary">(R$ {client.amount.toLocaleString('pt-BR')})</span>}
+                    {client.amount && <span className="ml-1 md:ml-2 text-neutral-text-secondary">(R$ {client.amount.toLocaleString('pt-BR')})</span>}
                   </div>
                 ))}
                 {parsedClients.length > 10 && (
-                  <div className="text-sm text-neutral-text-secondary italic">
+                  <div className="text-xs md:text-sm text-neutral-text-secondary italic">
                     ... e mais {parsedClients.length - 10} cliente(s)
                   </div>
                 )}
@@ -994,7 +994,7 @@ export default function AccountsPayableDashboard({ automation, department, onBac
             <button
               onClick={handleUpload}
               disabled={isProcessing}
-              className={`w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+              className={`w-full flex items-center justify-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-lg font-semibold transition-all text-sm md:text-base touch-manipulation active:scale-95 ${
                 isProcessing
                   ? 'bg-neutral-border text-neutral-text-secondary cursor-not-allowed'
                   : 'bg-gradient-to-br from-status-success to-green-600 text-white hover:shadow-lg hover:scale-105'
@@ -1002,12 +1002,12 @@ export default function AccountsPayableDashboard({ automation, department, onBac
             >
               {isProcessing ? (
                 <>
-                  <Loader2 size={20} className="animate-spin" />
+                  <Loader2 size={18} className="md:w-5 md:h-5 animate-spin" />
                   Processando...
                 </>
               ) : (
                 <>
-                  <CheckCircle size={20} />
+                  <CheckCircle size={18} className="md:w-5 md:h-5" />
                   Enviar
                 </>
               )}
@@ -1016,33 +1016,33 @@ export default function AccountsPayableDashboard({ automation, department, onBac
 
           {uploadStatus.type && (
             <div
-              className={`p-4 rounded-lg flex items-center gap-2 ${
+              className={`p-3 md:p-4 rounded-lg flex items-center gap-2 text-xs md:text-sm ${
                 uploadStatus.type === 'success'
                   ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
                   : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300'
               }`}
             >
               {uploadStatus.type === 'success' ? (
-                <CheckCircle size={20} />
+                <CheckCircle size={18} className="md:w-5 md:h-5 flex-shrink-0" />
               ) : (
-                <AlertCircle size={20} />
+                <AlertCircle size={18} className="md:w-5 md:h-5 flex-shrink-0" />
               )}
-              <span>{uploadStatus.message}</span>
+              <span className="break-words">{uploadStatus.message}</span>
             </div>
           )}
         </div>
       </div>
 
       {/* Toggle de Novas Inadimplências */}
-      <div className="mb-6 bg-gradient-to-br from-neutral-surface to-neutral-background border border-neutral-border rounded-xl p-4 shadow-sm flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <AlertCircle size={20} className="text-primary-blue" />
+      <div className="mb-4 md:mb-6 bg-gradient-to-br from-neutral-surface to-neutral-background border border-neutral-border rounded-lg md:rounded-xl p-3 md:p-4 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
+          <AlertCircle size={18} className="md:w-5 md:h-5 text-primary-blue flex-shrink-0" />
           <div>
-            <h3 className="text-sm font-semibold text-neutral-text-primary">Mostrar apenas novas inadimplências</h3>
+            <h3 className="text-xs md:text-sm font-semibold text-neutral-text-primary break-words">Mostrar apenas novas inadimplências</h3>
             <p className="text-xs text-neutral-text-secondary">Compara o PDF de hoje com o de ontem</p>
           </div>
         </div>
-        <label className="relative inline-flex items-center cursor-pointer" aria-label="Mostrar apenas novas inadimplências">
+        <label className="relative inline-flex items-center cursor-pointer flex-shrink-0 self-start sm:self-auto" aria-label="Mostrar apenas novas inadimplências">
           <input
             type="checkbox"
             checked={showOnlyNewDelinquencies}
@@ -1050,41 +1050,41 @@ export default function AccountsPayableDashboard({ automation, department, onBac
             className="sr-only peer"
             aria-label="Toggle para mostrar apenas novas inadimplências"
           />
-          <div className="w-14 h-7 bg-neutral-border peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-blue/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-neutral-border after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-blue"></div>
+          <div className="w-12 h-6 md:w-14 md:h-7 bg-neutral-border peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-blue/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-neutral-border after:border after:rounded-full after:h-5 after:w-5 md:after:h-6 md:after:w-6 after:transition-all peer-checked:bg-primary-blue touch-manipulation"></div>
         </label>
       </div>
 
       {/* Client and Date Filters - Reestruturado */}
-      <div className="card-3d-elevated rounded-2xl p-6 mb-6 shadow-3d relative overflow-hidden transition-colors duration-500">
+      <div className="card-3d-elevated rounded-xl md:rounded-2xl p-4 md:p-6 mb-4 md:mb-6 shadow-3d relative overflow-hidden transition-colors duration-500">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5 dark:from-primary-blue/10 dark:to-secondary-purple/10 transition-opacity duration-500"></div>
-        <div className="flex items-center gap-3 mb-6 relative z-10">
-          <div className="p-3 bg-gradient-to-br from-primary-blue to-primary-blue-dark rounded-xl shadow-md">
-            <Filter size={20} className="text-white" />
+        <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6 relative z-10">
+          <div className="p-2 md:p-3 bg-gradient-to-br from-primary-blue to-primary-blue-dark rounded-lg md:rounded-xl shadow-md flex-shrink-0">
+            <Filter size={18} className="md:w-5 md:h-5 text-white" />
           </div>
-          <h3 className="text-xl font-bold text-neutral-text-primary dark:text-slate-100 drop-shadow-sm transition-colors duration-500">
+          <h3 className="text-lg md:text-xl font-bold text-neutral-text-primary dark:text-slate-100 drop-shadow-sm transition-colors duration-500">
             Filtros
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* Clientes (mesmo design do XML, só que clientes) */}
           <div>
             <label className="block text-sm font-medium text-neutral-text-primary mb-2">
               Clientes
             </label>
-            <div className="backdrop-3d border border-neutral-border/50 rounded-xl p-4 max-h-48 overflow-y-auto shadow-inner relative overflow-hidden">
+            <div className="backdrop-3d border border-neutral-border/50 rounded-lg md:rounded-xl p-3 md:p-4 max-h-48 overflow-y-auto shadow-inner relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5"></div>
 
               {/* Barra de pesquisa */}
               <div className="relative z-10 mb-3">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-text-secondary" size={16} />
+                  <Search className="absolute left-2 md:left-3 top-1/2 transform -translate-y-1/2 text-neutral-text-secondary" size={16} />
                   <input
                     type="text"
                     placeholder="Pesquisar cliente..."
                     value={clientSearchTerm}
                     onChange={(e) => setClientSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 text-sm border-2 border-neutral-border/50 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue/50 backdrop-3d transition-all duration-200 hover:border-primary-blue/30 dark:placeholder:text-slate-400"
+                    className="w-full pl-9 md:pl-10 pr-3 md:pr-4 py-2.5 md:py-2 text-sm border-2 border-neutral-border/50 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue/50 backdrop-3d transition-all duration-200 hover:border-primary-blue/30 dark:placeholder:text-slate-400 touch-manipulation"
                   />
                 </div>
               </div>
@@ -1098,20 +1098,20 @@ export default function AccountsPayableDashboard({ automation, department, onBac
                     setSelectedClients(availableClients.map(c => c.displayName))
                   }
                 }}
-                className="text-sm text-primary-blue hover:text-primary-blue-dark font-semibold mb-3 relative z-10 transition-all duration-200 hover:scale-105 inline-block"
+                className="text-xs md:text-sm text-primary-blue hover:text-primary-blue-dark font-semibold mb-3 relative z-10 transition-all duration-200 hover:scale-105 inline-block touch-manipulation active:scale-95"
               >
                 {selectedClients.length === availableClients.length ? 'Desmarcar todas' : 'Selecionar todas'}
               </button>
 
-              <div className="space-y-2 relative z-10">
+              <div className="space-y-1.5 md:space-y-2 relative z-10">
                 {filteredClients.map((client) => {
                   const isSelected = selectedClients.includes(client.displayName)
                   return (
                     <label
                       key={client.id}
-                      className="flex items-center gap-3 cursor-pointer hover:bg-white/60 p-3 rounded-lg transition-all duration-200 group card-3d"
+                      className="flex items-center gap-2 md:gap-3 cursor-pointer hover:bg-white/60 p-2.5 md:p-3 rounded-lg transition-all duration-200 group card-3d touch-manipulation active:scale-95"
                     >
-                      <div className="relative w-5 h-5">
+                      <div className="relative w-5 h-5 flex-shrink-0">
                         <input
                           type="checkbox"
                           checked={isSelected}
@@ -1150,10 +1150,10 @@ export default function AccountsPayableDashboard({ automation, department, onBac
                           <div className="w-5 h-5 border-2 border-neutral-border rounded-sm"></div>
                         )}
                       </div>
-                      <span className="text-sm font-medium text-neutral-text-primary dark:text-slate-200 group-hover:text-primary-blue dark:group-hover:text-blue-400 transition-colors">
+                      <span className="text-xs md:text-sm font-medium text-neutral-text-primary dark:text-slate-200 group-hover:text-primary-blue dark:group-hover:text-blue-400 transition-colors break-words">
                         {client.name}
                         {client.code && (
-                          <span className="text-neutral-text-secondary dark:text-slate-400 ml-2">({client.code})</span>
+                          <span className="text-neutral-text-secondary dark:text-slate-400 ml-1 md:ml-2 text-xs">({client.code})</span>
                         )}
                       </span>
                     </label>
@@ -1174,11 +1174,11 @@ export default function AccountsPayableDashboard({ automation, department, onBac
               Período
             </label>
 
-            <div className="mb-4 relative z-10">
+            <div className="mb-3 md:mb-4 relative z-10">
               <label className="block text-xs text-neutral-text-secondary dark:text-slate-400 mb-2 transition-colors duration-500">
                 Períodos rápidos
               </label>
-              <div className="flex flex-wrap gap-2 relative z-10">
+              <div className="flex flex-wrap gap-1.5 md:gap-2 relative z-10">
                 {[
                   {
                     label: 'Últimos 30 dias',
@@ -1247,7 +1247,7 @@ export default function AccountsPayableDashboard({ automation, department, onBac
                       key={index}
                       type="button"
                       onClick={() => setDateRange({ start: preset.range.start, end: preset.range.end })}
-                      className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 cursor-pointer relative z-20 ${
+                      className={`px-2.5 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-medium rounded-lg transition-all duration-200 cursor-pointer relative z-20 touch-manipulation active:scale-95 ${
                         isActive
                           ? 'bg-gradient-to-r from-primary-blue to-primary-blue-dark text-white shadow-md scale-105'
                           : 'bg-white/60 dark:bg-slate-700/60 text-neutral-text-primary dark:text-slate-200 hover:bg-white/80 dark:hover:bg-slate-700/80 hover:scale-105 border border-neutral-border/50 dark:border-slate-600 hover:border-primary-blue/50'
@@ -1283,7 +1283,7 @@ export default function AccountsPayableDashboard({ automation, department, onBac
                     }
                   }}
                   aria-label="Data inicial do período"
-                  className="w-full px-4 py-3 border-2 border-neutral-border/50 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue/50 backdrop-3d transition-all duration-200 hover:border-primary-blue/30 shadow-sm hover:shadow-md cursor-pointer"
+                  className="w-full px-3 md:px-4 py-2.5 md:py-3 text-sm border-2 border-neutral-border/50 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200 rounded-lg md:rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue/50 backdrop-3d transition-all duration-200 hover:border-primary-blue/30 shadow-sm hover:shadow-md touch-manipulation"
                 />
               </div>
               <div>
@@ -1308,7 +1308,7 @@ export default function AccountsPayableDashboard({ automation, department, onBac
                     }
                   }}
                   aria-label="Data final do período"
-                  className="w-full px-4 py-3 border-2 border-neutral-border/50 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue/50 backdrop-3d transition-all duration-200 hover:border-primary-blue/30 shadow-sm hover:shadow-md cursor-pointer"
+                  className="w-full px-3 md:px-4 py-2.5 md:py-3 text-sm border-2 border-neutral-border/50 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200 rounded-lg md:rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue/50 backdrop-3d transition-all duration-200 hover:border-primary-blue/30 shadow-sm hover:shadow-md touch-manipulation"
                 />
               </div>
             </div>
@@ -1324,7 +1324,7 @@ export default function AccountsPayableDashboard({ automation, department, onBac
                       setDateRange({ start: getDateRangeForClients.min, end: getDateRangeForClients.max })
                     }
                   }}
-                  className="w-full text-xs font-semibold px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer relative z-20 bg-white/60 dark:bg-slate-700/60 text-primary-blue hover:text-primary-blue-dark hover:bg-white/80 dark:hover:bg-slate-700/80 hover:scale-[1.01] border border-neutral-border/50 dark:border-slate-600 hover:border-primary-blue/50"
+                  className="w-full text-xs font-semibold px-3 md:px-4 py-2 md:py-3 rounded-lg md:rounded-xl transition-all duration-200 cursor-pointer relative z-20 bg-white/60 dark:bg-slate-700/60 text-primary-blue hover:text-primary-blue-dark hover:bg-white/80 dark:hover:bg-slate-700/80 hover:scale-[1.01] border border-neutral-border/50 dark:border-slate-600 hover:border-primary-blue/50 touch-manipulation active:scale-95"
                 >
                   Ajustar para período completo
                 </button>
@@ -1334,7 +1334,7 @@ export default function AccountsPayableDashboard({ automation, department, onBac
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
         <StatCard
           title="Total a Pagar"
           value={totals.total}
@@ -1356,17 +1356,17 @@ export default function AccountsPayableDashboard({ automation, department, onBac
       </div>
 
       {isLoadingData ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 size={32} className="animate-spin text-primary-blue" />
-          <span className="ml-3 text-neutral-text-secondary">Carregando dados do Supabase...</span>
+        <div className="flex items-center justify-center py-8 md:py-12">
+          <Loader2 size={24} className="md:w-8 md:h-8 animate-spin text-primary-blue" />
+          <span className="ml-2 md:ml-3 text-sm md:text-base text-neutral-text-secondary">Carregando dados do Supabase...</span>
         </div>
       ) : filteredData.length === 0 ? (
-        <div className="bg-gradient-to-br from-neutral-surface to-neutral-background border border-neutral-border rounded-xl p-8 text-center">
-          <FileText size={48} className="mx-auto text-neutral-text-secondary mb-4" />
-          <h3 className="text-xl font-semibold text-neutral-text-primary mb-2">
+        <div className="bg-gradient-to-br from-neutral-surface to-neutral-background border border-neutral-border rounded-lg md:rounded-xl p-6 md:p-8 text-center">
+          <FileText size={36} className="md:w-12 md:h-12 mx-auto text-neutral-text-secondary mb-3 md:mb-4" />
+          <h3 className="text-lg md:text-xl font-semibold text-neutral-text-primary mb-2 break-words">
             Nenhum dado encontrado
           </h3>
-          <p className="text-neutral-text-secondary">
+          <p className="text-sm md:text-base text-neutral-text-secondary break-words px-4">
             {allData.length === 0
               ? 'Importe um arquivo para começar a ver os dados de contas a pagar.'
               : 'Nenhum dado encontrado no período selecionado. Ajuste os filtros de data ou cliente.'}
@@ -1376,7 +1376,7 @@ export default function AccountsPayableDashboard({ automation, department, onBac
         <>
           <AccountsPayableCharts data={filteredData} />
 
-          <div className="mt-8">
+          <div className="mt-6 md:mt-8">
             <AccountsPayableTable data={filteredData} />
           </div>
         </>
@@ -1421,17 +1421,17 @@ function StatCard({
   }, [value])
 
   return (
-    <div className="card-3d shadow-3d-hover bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-2xl p-6 group relative overflow-hidden">
+    <div className="card-3d shadow-3d-hover bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-xl md:rounded-2xl p-4 md:p-6 group relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300 from-primary-blue/5 via-transparent to-secondary-purple/5"></div>
       <div className="relative z-10">
-        <div className="flex items-start justify-between mb-4">
-          <div className={`p-4 bg-gradient-to-br ${gradient} rounded-xl shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 relative`}>
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-xl"></div>
-            <Icon className="text-white relative z-10" size={24} />
+        <div className="flex items-start justify-between mb-3 md:mb-4">
+          <div className={`p-3 md:p-4 bg-gradient-to-br ${gradient} rounded-lg md:rounded-xl shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 relative`}>
+            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-lg md:rounded-xl"></div>
+            <Icon className="text-white relative z-10" size={20} style={{ width: '20px', height: '20px' }} />
           </div>
         </div>
-        <h3 className="text-sm font-medium text-neutral-text-secondary mb-3">{title}</h3>
-        <p className="text-3xl font-bold text-neutral-text-primary drop-shadow-sm">
+        <h3 className="text-xs md:text-sm font-medium text-neutral-text-secondary mb-2 md:mb-3 break-words">{title}</h3>
+        <p className="text-xl md:text-2xl lg:text-3xl font-bold text-neutral-text-primary drop-shadow-sm break-words">
           {`R$ ${displayValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
         </p>
       </div>
