@@ -46,8 +46,8 @@ export async function getTaxData(
           name
         )
       `)
-      // IMPORTANTE: ID da automação no Supabase é "xml-siefiaz" (ver schema.sql)
-      .eq('automation_id', 'xml-siefiaz')
+      // IMPORTANTE: automation_id dos dados inseridos é "xml-sefaz" (igual ao id usado no dashboard)
+      .eq('automation_id', 'xml-sefaz')
       .in('company_id', companyIds)
       .order('updated_at', { ascending: false })
 
