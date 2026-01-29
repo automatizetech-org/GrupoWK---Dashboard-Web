@@ -191,23 +191,23 @@ function FlyToCityAndPopup(props: {
         const [cityName, stateCode] = sk.split('|')
         return (
           <Popup position={[point.lat, point.lng]} eventHandlers={{ remove: innerProps.onClose }}>
-            <div className="min-w-[200px] max-w-[320px] text-left popup-city-content">
-              <div className="font-bold text-sm text-slate-800 border-b border-slate-200 pb-2 mb-2 break-words">
+            <div className="w-[220px] max-w-[240px] sm:max-w-[320px] text-left popup-city-content">
+              <div className="font-bold text-[11px] sm:text-sm text-slate-800 border-b border-slate-200 pb-1.5 sm:pb-2 mb-1.5 sm:mb-2 break-words">
                 {cityName} · {stateCode}
               </div>
-              <p className="text-xs text-slate-600 mb-2">{companiesInCity.length} empresa(s)</p>
-              <div className="flex flex-wrap gap-1.5 mb-2">
-                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-blue-100 text-blue-700">
+              <p className="text-[10px] sm:text-xs text-slate-600 mb-1.5 sm:mb-2">{companiesInCity.length} empresa(s)</p>
+              <div className="flex flex-wrap gap-1 mb-1.5 sm:mb-2">
+                <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-md text-[10px] sm:text-xs font-semibold bg-blue-100 text-blue-700 whitespace-nowrap">
                   {cityTotals.xmlCount} XML
                 </span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-purple-100 text-purple-700">
+                <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-md text-[10px] sm:text-xs font-semibold bg-purple-100 text-purple-700 whitespace-nowrap">
                   {cityTotals.nfCount} NF
                 </span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-green-100 text-green-700">
+                <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-md text-[10px] sm:text-xs font-semibold bg-green-100 text-green-700 whitespace-nowrap">
                   {cityTotals.nfcCount} NFC
                 </span>
               </div>
-              <ul className="space-y-1.5 max-h-64 overflow-y-auto list-none pl-0">
+              <ul className="space-y-1 max-h-40 sm:max-h-64 overflow-y-auto list-none pl-0">
                 {companiesInCity.map((c) => (
                   <li key={c.companyId} className="text-xs p-2 rounded border border-slate-200/80 bg-slate-100/80 hover:bg-slate-200/60 transition-colors cursor-default select-text">
                     <span className="font-semibold text-slate-800 block break-words">{c.companyName}</span>
@@ -616,29 +616,6 @@ export default function CompanyMap({ selectedCompanyIds = [], dateRange }: Compa
       ;(layer as any).on('click', () => {
         setActiveCityKeys((prev) => ({ ...prev, [key]: !prev[key] }))
       })
-      const companiesInCity = enrichedLocations.filter(
-        (l) =>
-          (l.city || '').trim() &&
-          (l.state || '').toUpperCase().trim() &&
-          cityKey((l.city || '').trim(), (l.state || '').toUpperCase().trim()) === key
-      )
-      const companyNames = companiesInCity.map((c) => c.companyName || '—')
-      const escapedName = name.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-      const html =
-        `<div class="city-tooltip-inner p-2 text-left">` +
-        `<div class="city-tooltip-title">${escapedName} · ${companiesInCity.length} ${companiesInCity.length === 1 ? 'empresa' : 'empresas'}</div>` +
-        `<ul class="city-tooltip-list">${companyNames.map((n) => `<li>${(n || '—').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</li>`).join('')}</ul>` +
-        `<div class="city-tooltip-hint">Clique para ativar/desativar na lista</div>` +
-        `</div>`
-      if (typeof (layer as any).bindTooltip === 'function') {
-        ;(layer as any).bindTooltip(html, {
-          sticky: true,
-          direction: 'top',
-          offset: [0, -8],
-          opacity: 0.97,
-          className: 'city-companies-tooltip',
-        })
-      }
     },
     [cityPoints, enrichedLocations]
   )
