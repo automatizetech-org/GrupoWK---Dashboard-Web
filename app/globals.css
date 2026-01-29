@@ -73,6 +73,40 @@ a {
   text-decoration: none;
 }
 
+/* Corrige desalinhamento do mouse na automação XML (perspective/3D no body) */
+.xml-mouse-fix {
+  transform: translate3d(0, 0, 0);
+  transform-style: flat;
+  isolation: isolate;
+}
+/* Remove 3D e translateZ de todos os cards dentro da página XML para o hit-test bater com o visual */
+.xml-mouse-fix .card-3d,
+.xml-mouse-fix .card-3d-elevated {
+  transform: none !important;
+  transform-style: flat !important;
+}
+.xml-mouse-fix .card-3d:hover,
+.xml-mouse-fix .card-3d-elevated:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+.xml-mouse-fix .filters-hit-fix {
+  transform: none !important;
+}
+
+/* Evita desalinhamento do mouse em cards com inputs (perspective no body) */
+.filters-hit-fix {
+  transform: translateZ(0);
+  isolation: isolate;
+}
+.filters-hit-fix .card-3d {
+  transform: none;
+}
+.filters-hit-fix .card-3d:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
 /* 3D Effects */
 .card-3d {
   transform-style: preserve-3d;
@@ -473,6 +507,14 @@ a {
   }
 }
 
+/* Alfinetes sempre por cima dos polígonos das cidades */
+.leaflet-marker-pane {
+  z-index: 650 !important;
+}
+.leaflet-overlay-pane {
+  z-index: 400;
+}
+
 /* Leaflet Map Styles – contido no bloco, sem extrapolar */
 .leaflet-container {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -495,6 +537,50 @@ a {
 
 .leaflet-popup-tip {
   background: white;
+}
+
+/* Tooltip no hover do polígono da cidade – lista de empresas; adapta ao nome da cidade */
+.city-companies-tooltip .leaflet-tooltip-inner {
+  min-width: 140px;
+  max-width: 360px;
+  width: max-content;
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.4;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.city-companies-tooltip .leaflet-tooltip-inner .city-tooltip-inner {
+  padding: 0;
+}
+.city-companies-tooltip .leaflet-tooltip-inner .city-tooltip-title {
+  font-weight: 600;
+  font-size: 12px;
+  color: #334155;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  word-wrap: break-word;
+  white-space: normal;
+  word-break: break-word;
+}
+.city-companies-tooltip .leaflet-tooltip-inner .city-tooltip-list {
+  margin: 4px 0 0;
+  padding-left: 14px;
+  list-style: disc;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.city-companies-tooltip .leaflet-tooltip-inner .city-tooltip-list li {
+  margin: 2px 0;
+  word-wrap: break-word;
+  white-space: normal;
+}
+.city-companies-tooltip .leaflet-tooltip-inner .city-tooltip-hint {
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 6px;
 }
 
 /* State hover popup styling */

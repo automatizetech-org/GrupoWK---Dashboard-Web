@@ -6,7 +6,6 @@ import { getTaxData, getCompanies } from '@/lib/supabase-queries'
 import { getPreviousMonth } from '@/lib/dateUtils'
 import Filters from '../Filters'
 import XmlCharts from '../charts/XmlCharts'
-import DataTable from '../DataTable'
 import SafeCompanyMap from '../SafeCompanyMap'
 import ErrorBoundary from '../ErrorBoundary'
 import { ArrowLeft, FileText, Receipt, CreditCard, DollarSign, TrendingUp, TrendingDown } from 'lucide-react'
@@ -181,7 +180,7 @@ export default function XmlAutomationDashboard({ automation, department, onBack 
   }, [filteredData])
 
   return (
-    <div>
+    <div className="xml-mouse-fix">
       <button
         onClick={onBack}
         className="flex items-center gap-2 md:gap-3 text-neutral-text-secondary hover:text-primary-blue mb-4 md:mb-6 transition-all duration-300 group card-3d inline-block px-3 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl hover:bg-white/50 backdrop-3d touch-manipulation active:scale-95"
@@ -296,12 +295,6 @@ export default function XmlAutomationDashboard({ automation, department, onBack 
           <div className="mt-6 md:mt-8 mb-6 md:mb-8">
             <ErrorBoundary>
               <SafeCompanyMap selectedCompanyIds={selectedCompanies || []} dateRange={dateRange} />
-            </ErrorBoundary>
-          </div>
-
-          <div className="mt-6 md:mt-8">
-            <ErrorBoundary>
-              <DataTable data={filteredData} />
             </ErrorBoundary>
           </div>
         </>

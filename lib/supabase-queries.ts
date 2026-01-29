@@ -380,8 +380,10 @@ export async function getCompanies(): Promise<Company[]> {
 }
 
 /**
- * Busca localizações das empresas do Supabase
- * O estado vem do campo 'state' da tabela companies (obtido via API CNPJ)
+ * Busca localizações das empresas do Supabase.
+ * Usa apenas colunas que existem em qualquer schema (id, name, cnpj, state).
+ * city/lat/lng são opcionais; se existirem são usados, senão ficam vazios/0 e a cidade
+ * pode ser preenchida depois via API CNPJ + geocoding.
  */
 export async function getCompanyLocations(companyIds: string[]): Promise<any[]> {
   if (!isSupabaseConfigured || !supabase) {
@@ -389,7 +391,21 @@ export async function getCompanyLocations(companyIds: string[]): Promise<any[]> 
     return []
   }
 
+  if (!companyIds || companyIds.length === 0) {
+    return []
+  }
+
+  const stateToRegion: Record<string, string> = {
+    'AC': 'Norte', 'AP': 'Norte', 'AM': 'Norte', 'PA': 'Norte', 'RO': 'Norte', 'RR': 'Norte', 'TO': 'Norte',
+    'AL': 'Nordeste', 'BA': 'Nordeste', 'CE': 'Nordeste', 'MA': 'Nordeste', 'PB': 'Nordeste',
+    'PE': 'Nordeste', 'PI': 'Nordeste', 'RN': 'Nordeste', 'SE': 'Nordeste',
+    'GO': 'Centro-Oeste', 'MT': 'Centro-Oeste', 'MS': 'Centro-Oeste', 'DF': 'Centro-Oeste',
+    'ES': 'Sudeste', 'MG': 'Sudeste', 'RJ': 'Sudeste', 'SP': 'Sudeste',
+    'PR': 'Sul', 'RS': 'Sul', 'SC': 'Sul',
+  }
+
   try {
+    // Selecionar só colunas que existem em qualquer versão do schema (evita erro se faltar city/lat/lng)
     const { data, error } = await supabase
       .from('companies')
       .select('id, name, cnpj, state')
@@ -400,26 +416,15 @@ export async function getCompanyLocations(companyIds: string[]): Promise<any[]> 
       return []
     }
 
-    // Mapeia estado para região (para destacar no mapa)
-    const stateToRegion: Record<string, string> = {
-      'AC': 'Norte', 'AP': 'Norte', 'AM': 'Norte', 'PA': 'Norte', 'RO': 'Norte', 'RR': 'Norte', 'TO': 'Norte',
-      'AL': 'Nordeste', 'BA': 'Nordeste', 'CE': 'Nordeste', 'MA': 'Nordeste', 'PB': 'Nordeste',
-      'PE': 'Nordeste', 'PI': 'Nordeste', 'RN': 'Nordeste', 'SE': 'Nordeste',
-      'GO': 'Centro-Oeste', 'MT': 'Centro-Oeste', 'MS': 'Centro-Oeste', 'DF': 'Centro-Oeste',
-      'ES': 'Sudeste', 'MG': 'Sudeste', 'RJ': 'Sudeste', 'SP': 'Sudeste',
-      'PR': 'Sul', 'RS': 'Sul', 'SC': 'Sul',
-    }
-
     return (data || []).map((item: any) => ({
       companyId: item.id,
       companyName: item.name,
       cnpj: item.cnpj,
-      state: item.state || '',
+      state: (item.state || '').toString().trim(),
+      city: '',
       region: stateToRegion[item.state] || '',
-      // Campos removidos - não precisamos mais de lat/lng/city
       lat: 0,
       lng: 0,
-      city: '',
     }))
   } catch (error) {
     console.error('Erro ao buscar localizações:', error)

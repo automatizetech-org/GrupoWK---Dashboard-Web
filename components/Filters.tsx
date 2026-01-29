@@ -111,8 +111,8 @@ export default function Filters({
   }
 
   return (
-    <div className="card-3d-elevated rounded-xl md:rounded-2xl p-4 md:p-6 mb-4 md:mb-6 shadow-3d relative overflow-hidden transition-colors duration-500">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5 dark:from-primary-blue/10 dark:to-secondary-purple/10 transition-opacity duration-500"></div>
+    <div className="card-3d-elevated filters-hit-fix rounded-xl md:rounded-2xl p-4 md:p-6 mb-4 md:mb-6 shadow-3d relative overflow-hidden transition-colors duration-500 isolate">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5 dark:from-primary-blue/10 dark:to-secondary-purple/10 transition-opacity duration-500 pointer-events-none" aria-hidden="true"></div>
       <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6 relative z-10">
         <div className="p-2 md:p-3 bg-gradient-to-br from-primary-blue to-primary-blue-dark rounded-lg md:rounded-xl shadow-md">
           <Filter size={18} className="md:w-5 md:h-5 text-white" />
@@ -126,7 +126,7 @@ export default function Filters({
             Empresas
           </label>
           <div className="backdrop-3d border border-neutral-border/50 dark:border-slate-600 rounded-lg md:rounded-xl p-3 md:p-4 max-h-48 md:max-h-48 overflow-y-auto shadow-inner relative overflow-hidden bg-white dark:bg-slate-800/95">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5 dark:from-primary-blue/10 dark:to-secondary-purple/10"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5 dark:from-primary-blue/10 dark:to-secondary-purple/10 pointer-events-none" aria-hidden="true"></div>
             
             {/* Barra de pesquisa */}
             <div className="relative z-10 mb-3">
