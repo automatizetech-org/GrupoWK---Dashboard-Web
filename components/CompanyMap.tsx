@@ -1033,23 +1033,27 @@ export default function CompanyMap({ selectedCompanyIds = [], dateRange }: Compa
                                     return newSet
                                   })
                                 }}
-                                className="w-full flex items-center justify-between p-3 hover:bg-white/50 transition-colors text-left"
+                                className="w-full flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between p-3 hover:bg-white/50 transition-colors text-left"
                               >
-                                <div className="flex-1 min-w-0">
-                                  <p className="font-semibold text-sm text-neutral-text-primary">{c.companyName}</p>
+                                <div className="w-full sm:flex-1 min-w-0">
+                                  <p className="font-semibold text-sm text-neutral-text-primary truncate sm:whitespace-normal">{c.companyName}</p>
                                   <p className="text-xs text-neutral-text-secondary">{c.city || '-'} · {c.region || c.state}</p>
                                 </div>
-                                <div className="flex items-center gap-2 flex-shrink-0">
-                                  {companyTotals.xmlCount > 0 && (
-                                    <span className="text-xs font-bold text-primary-blue bg-primary-blue/10 px-2 py-1 rounded">{companyTotals.xmlCount} XML</span>
-                                  )}
-                                  {companyTotals.nfCount > 0 && (
-                                    <span className="text-xs font-bold text-secondary-purple bg-secondary-purple/10 px-2 py-1 rounded">{companyTotals.nfCount} NF</span>
-                                  )}
-                                  {companyTotals.nfcCount > 0 && (
-                                    <span className="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded">{companyTotals.nfcCount} NFC</span>
-                                  )}
-                                  {isExpanded ? <ChevronUp className="w-4 h-4 text-neutral-text-secondary" /> : <ChevronDown className="w-4 h-4 text-neutral-text-secondary" />}
+                                <div className="w-full sm:w-auto flex items-center gap-2 flex-wrap justify-start sm:justify-end">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    {companyTotals.xmlCount > 0 && (
+                                      <span className="text-xs font-bold text-primary-blue bg-primary-blue/10 px-2 py-1 rounded whitespace-nowrap">{companyTotals.xmlCount} XML</span>
+                                    )}
+                                    {companyTotals.nfCount > 0 && (
+                                      <span className="text-xs font-bold text-secondary-purple bg-secondary-purple/10 px-2 py-1 rounded whitespace-nowrap">{companyTotals.nfCount} NF</span>
+                                    )}
+                                    {companyTotals.nfcCount > 0 && (
+                                      <span className="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded whitespace-nowrap">{companyTotals.nfcCount} NFC</span>
+                                    )}
+                                  </div>
+                                  <span className="ml-auto sm:ml-0 flex-shrink-0">
+                                    {isExpanded ? <ChevronUp className="w-4 h-4 text-neutral-text-secondary" /> : <ChevronDown className="w-4 h-4 text-neutral-text-secondary" />}
+                                  </span>
                                 </div>
                               </button>
                               {isExpanded && (
