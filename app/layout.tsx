@@ -4,6 +4,17 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'WK Analytics - Grupo WK',
   description: 'Sistema de análise e gestão de dados do Grupo WK - Garantia de Qualidade em Dados',
+  icons: {
+    icon: '/images/logo.png',
+    apple: '/images/logo.png',
+  },
+  appleWebApp: {
+    capable: true,
+    title: 'WK Analytics',
+    statusBarStyle: 'default',
+    startupImage: '/images/logo.png',
+  },
+  manifest: '/manifest.json',
 }
 
 export const viewport: Viewport = {
