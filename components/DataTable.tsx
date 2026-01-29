@@ -4,19 +4,22 @@ import { type TaxData } from '@/lib/data'
 import { DollarSign, TrendingUp, TrendingDown } from 'lucide-react'
 import { useMemo } from 'react'
 
-interface DataTableProps {
-  data: TaxData[]
+interface CompanyRef {
+  id: string
+  name: string
 }
 
-export default function DataTable({ data }: DataTableProps) {
-  // Agrupa dados por empresa (uma linha por empresa)
-  const groupedData = useMemo(() => {
+interface DataTableProps {
+  data: TaxData[]
+  /** Lista de empresas selecionadas: a tabela mostra uma linha por empresa, mesmo sem dados no período */
+  selectedCompanies?: CompanyRef[]
+}
+
+export default function DataTable({ data, selectedCompanies = [] }: DataTableProps) {
+  // Agrupa dados fiscais por empresa (para preencher as linhas)
+  const dataByCompanyId = useMemo(() => {
     const grouped = data.reduce((acc, item) => {
-      // Ignora dados de evolução (isEvolutionData) para a tabela detalhada
-      if (item.isEvolutionData) {
-        return acc
-      }
-      
+      if (item.isEvolutionData) return acc
       const key = item.companyId
       if (!acc[key]) {
         acc[key] = {
@@ -31,14 +34,12 @@ export default function DataTable({ data }: DataTableProps) {
           resultado: 0,
         }
       }
-      
       acc[key].xmlCount += item.xmlCount
       acc[key].nfCount += item.nfCount
       acc[key].nfcCount += item.nfcCount
       acc[key].faturamento += (item.faturamento || 0)
       acc[key].despesa += (item.despesa || 0)
-      acc[key].resultado = acc[key].faturamento - acc[key].despesa
-      
+      acc[key].resultado = (acc[key].faturamento || 0) - (acc[key].despesa || 0)
       return acc
     }, {} as Record<string, {
       id: string
@@ -51,12 +52,32 @@ export default function DataTable({ data }: DataTableProps) {
       despesa: number
       resultado: number
     }>)
-    
-    return Object.values(grouped)
+    return grouped
   }, [data])
 
-  if (groupedData.length === 0) {
-    return null // Não mostra mensagem se não há dados - deixa vazio
+  // Uma linha por empresa selecionada; se não houver selectedCompanies, usa só as que têm dados
+  const tableRows = useMemo(() => {
+    if (selectedCompanies.length > 0) {
+      return selectedCompanies.map((c) => {
+        const row = dataByCompanyId[c.id]
+        return {
+          id: row?.id ?? c.id,
+          companyId: c.id,
+          companyName: c.name,
+          xmlCount: row?.xmlCount ?? 0,
+          nfCount: row?.nfCount ?? 0,
+          nfcCount: row?.nfcCount ?? 0,
+          faturamento: row?.faturamento ?? 0,
+          despesa: row?.despesa ?? 0,
+          resultado: row != null ? (row.resultado ?? row.faturamento - row.despesa) : 0,
+        }
+      })
+    }
+    return Object.values(dataByCompanyId)
+  }, [selectedCompanies, dataByCompanyId])
+
+  if (tableRows.length === 0) {
+    return null
   }
 
   return (
@@ -73,7 +94,7 @@ export default function DataTable({ data }: DataTableProps) {
           <table className="w-full min-w-[640px] md:min-w-0">
             <thead className="backdrop-3d bg-neutral-background/50">
               <tr>
-                <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-neutral-text-secondary uppercase tracking-wider sticky left-0 bg-neutral-background/95 z-20">
+                <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-neutral-text-secondary uppercase tracking-wider sticky left-0 bg-neutral-background/95 dark:bg-slate-800/95 z-20">
                   Empresa
                 </th>
                 <th className="px-2 md:px-4 py-2 md:py-3 text-center text-xs font-semibold text-neutral-text-secondary uppercase tracking-wider">
@@ -96,17 +117,17 @@ export default function DataTable({ data }: DataTableProps) {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-border/30">
-            {groupedData.map((item) => {
+            <tbody className="divide-y divide-neutral-border/30 bg-neutral-background/30">
+            {tableRows.map((item) => {
               const faturamento = item.faturamento || 0
               const despesa = item.despesa || 0
               const resultado = item.resultado !== undefined ? item.resultado : (faturamento - despesa)
               const isPositive = resultado >= 0
               
               return (
-                <tr key={item.id} className="hover:bg-neutral-background/50 transition-colors group">
-                  <td className="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap text-xs md:text-sm font-semibold text-neutral-text-primary sticky left-0 bg-white/95 dark:bg-slate-800/95 group-hover:bg-white dark:group-hover:bg-slate-800 z-10">
-                    <span className="break-words max-w-[120px] md:max-w-none block truncate">{item.companyName}</span>
+                <tr key={item.id} className="hover:bg-neutral-background/50 transition-colors group select-text">
+                  <td className="px-3 md:px-6 py-3 md:py-4 text-xs md:text-sm font-semibold text-neutral-text-primary sticky left-0 bg-neutral-background/95 dark:bg-slate-800/95 group-hover:bg-neutral-background/95 dark:group-hover:bg-slate-800/95 z-10 align-middle">
+                    <span className="break-words max-w-[120px] md:max-w-none block">{item.companyName}</span>
                   </td>
                   <td className="px-2 md:px-4 py-3 md:py-4 whitespace-nowrap text-xs md:text-sm font-medium text-neutral-text-primary text-center">
                     {item.xmlCount.toLocaleString()}
