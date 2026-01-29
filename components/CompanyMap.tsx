@@ -493,7 +493,7 @@ export default function CompanyMap({ selectedCompanyIds = [], dateRange }: Compa
   // Buscar GeoJSON de municípios por estado (para desenhar polígonos)
   useEffect(() => {
     if (!mounted || cityPoints.length === 0) return
-    const statesNeeded = [...new Set(cityPoints.map((p) => p.state))]
+    const statesNeeded = Array.from(new Set(cityPoints.map((p) => p.state)))
     let cancelled = false
     const run = async () => {
       for (const uf of statesNeeded) {
