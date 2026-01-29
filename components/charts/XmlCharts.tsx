@@ -499,14 +499,15 @@ export default function XmlCharts({ data, dateRange }: XmlChartsProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
       {/* Enhanced Pie Chart - Document Types */}
-      <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-xl md:rounded-2xl p-4 md:p-6 lg:p-8 shadow-3d relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5"></div>
+      <div className="card-3d-elevated bg-gradient-to-br from-white via-white to-neutral-background border border-neutral-border/50 rounded-xl md:rounded-2xl p-4 md:p-6 lg:p-8 shadow-3d relative overflow-visible">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-blue/5 via-transparent to-secondary-purple/5 rounded-xl md:rounded-2xl pointer-events-none"></div>
         <h3 className="text-base md:text-lg lg:text-xl font-bold text-neutral-text-primary mb-4 md:mb-6 flex items-center gap-2 relative z-10">
           <div className="w-1 h-5 md:h-6 bg-gradient-to-b from-primary-blue to-secondary-purple rounded-full shadow-lg flex-shrink-0"></div>
           <span className="break-words">Distribuição por Tipo de Documento</span>
         </h3>
-        <ResponsiveContainer width="100%" height={280} className="md:h-[350px] chart-3d-container">
-          <PieChart>
+        <div className="relative overflow-visible min-h-[300px] md:min-h-[380px]">
+        <ResponsiveContainer width="100%" height={280} className="md:h-[350px] chart-3d-container overflow-visible">
+          <PieChart margin={{ top: 24, right: 24, bottom: 24, left: 24 }}>
             <defs>
               {documentTypeData.map((entry, index) => (
                 <linearGradient key={`xml-gradient-${index}`} id={`xml-gradient-${index}`} x1="0" y1="0" x2="0" y2="1">
@@ -523,8 +524,8 @@ export default function XmlCharts({ data, dateRange }: XmlChartsProps) {
               label={({ name, percent, value }) => 
                 `${name}\n${(percent * 100).toFixed(1)}%\n(${value.toLocaleString()})`
               }
-              outerRadius={isMobile ? 80 : 120}
-              innerRadius={isMobile ? 30 : 40}
+              outerRadius={isMobile ? 70 : 100}
+              innerRadius={isMobile ? 26 : 34}
               fill="#8884d8"
               dataKey="value"
               paddingAngle={2}
@@ -669,6 +670,7 @@ export default function XmlCharts({ data, dateRange }: XmlChartsProps) {
             />
           </PieChart>
         </ResponsiveContainer>
+        </div>
       </div>
 
       {/* Bar Chart - Companies */}
