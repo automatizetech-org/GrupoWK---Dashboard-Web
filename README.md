@@ -76,7 +76,7 @@ Cada automação possui seu próprio dashboard com filtros, tabelas e gráficos 
 
 3. **Configurar variáveis de ambiente**
 
-   Crie um arquivo `.env` na raiz do projeto com:
+   Crie um arquivo `.env` na raiz do projeto (nunca commite esse arquivo — ele já está no `.gitignore`) com:
 
    | Variável                      | Descrição                                |
    |------------------------------|------------------------------------------|
